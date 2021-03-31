@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding style="max-width: 1200px;">
     <editor />
   </q-page>
 </template>
