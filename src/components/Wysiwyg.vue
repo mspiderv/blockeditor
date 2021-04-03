@@ -106,12 +106,10 @@ export default defineComponent({
       fonts,
     }
   },
-  describeBlock () {
-    return {
-      name: 'Rich Text',
-      icon: 'wysiwyg',
-      defaultValue: '',
-    }
+  blockDefinition: {
+    name: 'Rich Text',
+    icon: 'wysiwyg',
+    defaultValue: '',
   }
 })
 </script>

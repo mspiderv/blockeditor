@@ -20,12 +20,10 @@ export default defineComponent({
       type: String,
     }
   },
-  describeBlock () {
-    return {
-      name: 'Paragraph',
-      icon: 'subject',
-      defaultValue: '',
-    }
+  blockDefinition: {
+    name: 'Paragraph',
+    icon: 'subject',
+    defaultValue: '',
   }
 })
 </script>

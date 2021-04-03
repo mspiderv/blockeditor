@@ -76,12 +76,10 @@ export default defineComponent({
       editor,
     }
   },
-  describeBlock () {
-    return {
-      name: 'HTML',
-      icon: 'code',
-      defaultValue: '',
-    }
+  blockDefinition: {
+    name: 'HTML',
+    icon: 'code',
+    defaultValue: '',
   }
 })
 </script>

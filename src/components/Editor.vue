@@ -23,10 +23,10 @@
                   round
                   v-for="(block, blockName) of blocks"
                   :key="blockName"
-                  :icon="block.describeBlock().icon"
+                  :icon="block.blockDefinition.icon"
                   @click="createBlock(blockName)"
                 >
-                  <q-tooltip>{{ block.describeBlock().name }}</q-tooltip>
+                  <q-tooltip>{{ block.blockDefinition.name }}</q-tooltip>
                 </q-btn>
               </div>
               <!-- Right buttons -->
@@ -69,10 +69,11 @@
               <q-toolbar class="q-px-sm justify-between block-toolbar">
                 <div>
                   <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />
-                  <span class="text-bold q-mx-md">{{ blocks[element.type].describeBlock().name }}</span>
+                  <span class="text-bold q-mx-md">{{ blocks[element.type].blockDefinition.name }}</span>
                   <!-- Actions -->
                   <q-btn
-                    v-for="(action, actionName) of blocks[element.type].describeBlock().actions"
+                    v-if="blocks[element.type].blockActions"
+                    v-for="(action, actionName) of blocks[element.type].blockActions(element.data)"
                     flat
                     round
                     size="sm"
@@ -87,13 +88,13 @@
                     v-model="element.visible"
                     checked-icon="visibility"
                     unchecked-icon="visibility_off"
-                    color="positive"
+                    color="grey-8"
                     v-if="withVisibility"
                   >
                     <q-tooltip>Block is {{ element.visible ? 'visible' : 'invisible' }}</q-tooltip>
                   </q-toggle>
-                  <q-btn flat round size="sm" icon="content_copy" @click="copyBlock(element, index)">
-                    <q-tooltip>Copy block</q-tooltip>
+                  <q-btn flat round size="sm" icon="content_copy" @click="duplicateBlock(element, index)">
+                    <q-tooltip>Duplicate block</q-tooltip>
                   </q-btn>
                   <q-btn flat round size="sm" icon="close" @click="deleteBlock(element, index)">
                     <q-tooltip>Delete block</q-tooltip>
@@ -116,6 +117,13 @@
 </template>
 
 <script>
+// TODO: Layout manager (flex rows ...)
+// TODO: TableBlock
+// TODO: ImageBlock
+// TODO: [AccordionBlock]
+// TODO: [AlertBlock]
+// TODO: [ButtonBlock]
+
 import copy from 'clipboard-copy'
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
@@ -169,7 +177,7 @@ export default defineComponent({
     }
 
     function createBlock (blockName) {
-      const cfg = props.blocks[blockName].describeBlock()
+      const cfg = props.blocks[blockName].blockDefinition
       let newBlock = {
         type: blockName,
       }
@@ -185,7 +193,7 @@ export default defineComponent({
       ])
     }
 
-    function copyBlock (block, index) {
+    function duplicateBlock (block, index) {
       const value = [...props.modelValue]
       value.splice(index, 0, cloneBlockData(block))
       update(value)
@@ -283,7 +291,7 @@ export default defineComponent({
       update,
       toJSON,
       createBlock,
-      copyBlock,
+      duplicateBlock,
       deleteBlock,
       deleteAllBlocks,
       setBlockRef,

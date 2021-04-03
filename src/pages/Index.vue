@@ -41,6 +41,7 @@
 import Editor from 'components/Editor'
 import { defineComponent, ref } from 'vue'
 
+import Heading from 'components/Heading'
 import Paragraph from 'components/Paragraph'
 import Wysiwyg from 'components/Wysiwyg'
 import Delimiter from 'components/Delimiter'
@@ -55,6 +56,7 @@ export default defineComponent({
     const value = ref([])
     const value2 = ref([])
     const blocks = {
+      Heading,
       Paragraph,
       Wysiwyg,
       Delimiter,
