@@ -23,15 +23,15 @@ export default defineComponent({
     const value = ref([
       {
         "type": "Paragraph",
-        "data": "this is default value"
+        "data": "this is default value 1"
       },
       {
         "type": "Paragraph",
-        "data": "this is default value"
+        "data": "this is default value 2"
       },
       {
         "type": "Paragraph",
-        "data": "this is default value"
+        "data": "this is default value 3"
       }
     ])
     const blocks = {

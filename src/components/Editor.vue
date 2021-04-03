@@ -5,57 +5,66 @@
   >
     <template v-slot:control>
       <q-card class="full-width q-mt-sm">
-        <!-- Tools -->
-        <q-toolbar class="q-px-sm">
-          <q-btn
-            flat
-            round
-            v-for="(block, blockName) of blocks"
-            :key="blockName"
-            :icon="block.describeBlock().icon"
-            @click="createBlock(blockName)"
-          >
-            <q-tooltip>{{ block.describeBlock().name }}</q-tooltip>
-          </q-btn>
-        </q-toolbar>
-
-        <!-- Render blocks -->
-        <template
-          v-for="(block, index) of modelValue"
-          :key="index"
+        <draggable
+          :group="draggableGroup"
+          v-model="modelValue"
+          handle=".draggable-handle"
+          :item-key="blockKey"
+          ghost-class="bg-grey-6"
+          @update="$emit('update:modelValue', modelValue)"
         >
-          <!-- Header -->
-          <q-toolbar class="q-px-sm bg-grey-2 justify-between">
-            <div>
-              <q-btn flat round icon="drag_handle" />
-              <span class="text-bold q-mr-md">Paragraph</span>
-              <!-- Actions -->
+          <!-- Tools -->
+          <template #header>
+            <q-toolbar class="q-px-sm">
               <q-btn
-                v-for="(action, actionName) of blocks[block.type].describeBlock().actions"
                 flat
                 round
-                size="sm"
-                v-bind="action"
-                @click="callBlockAction(block, index, actionName)"
+                v-for="(block, blockName) of blocks"
+                :key="blockName"
+                :icon="block.describeBlock().icon"
+                @click="createBlock(blockName)"
+              >
+                <q-tooltip>{{ block.describeBlock().name }}</q-tooltip>
+              </q-btn>
+            </q-toolbar>
+          </template>
+          <!-- Render blocks -->
+          <template #item="{ element, index }">
+            <div>
+              <!-- Header -->
+              <q-toolbar class="q-px-sm justify-between block-toolbar">
+                <div>
+                  <q-icon size="sm" name="drag_handle" class="q-ml-xs cursor-pointer draggable-handle" />
+                  <span class="text-bold q-mx-md">Paragraph</span>
+                  <!-- Actions -->
+                  <q-btn
+                    v-for="(action, actionName) of blocks[element.type].describeBlock().actions"
+                    flat
+                    round
+                    size="sm"
+                    v-bind="action"
+                    @click="callBlockAction(element, index, actionName)"
+                  />
+                </div>
+                <div>
+                  <q-btn flat round size="sm" icon="content_copy" @click="copyBlock(element, index)">
+                    <q-tooltip>Copy block</q-tooltip>
+                  </q-btn>
+                  <q-btn flat round size="sm" icon="delete" @click="deleteBlock(element, index)">
+                    <q-tooltip>Delete block</q-tooltip>
+                  </q-btn>
+                </div>
+              </q-toolbar>
+
+              <!-- Content -->
+              <component
+                :ref="ref => setBlockRef(index, ref)"
+                :is="blocks[element.type]"
+                v-model="element.data"
               />
             </div>
-            <div>
-              <q-btn flat round size="sm" icon="content_copy" @click="copyBlock(block, index)">
-                <q-tooltip>Copy block</q-tooltip>
-              </q-btn>
-              <q-btn flat round size="sm" icon="delete" @click="deleteBlock(block, index)">
-                <q-tooltip>Delete block</q-tooltip>
-              </q-btn>
-            </div>
-          </q-toolbar>
-
-          <!-- Content -->
-          <component
-            :ref="ref => setBlockRef(index, ref)"
-            :is="blocks[block.type]"
-            v-model="block.data"
-          />
-        </template>
+          </template>
+        </draggable>
       </q-card>
     </template>
   </q-field>
@@ -63,12 +72,16 @@
 
 <script>
 import { useQuasar } from 'quasar'
+import Draggable from 'vuedraggable'
 
 export default {
   name: 'BlockEditorComponent',
   emits: [
     'update:modelValue',
   ],
+  components: {
+    Draggable,
+  },
   props: {
     blocks: {
       type: Object,
@@ -77,6 +90,10 @@ export default {
     modelValue: {
       type: Array,
       required: true,
+    },
+    draggableGroup: {
+      type: String,
+      default: 'blockeditor-group',
     }
   },
   setup (props, ctx) {
@@ -131,13 +148,23 @@ export default {
       blockRefs[index][actionName]()
     }
 
+    function blockKey (block) {
+      return props.modelValue.indexOf(block)
+    }
+
     return {
       createBlock,
       copyBlock,
       deleteBlock,
       setBlockRef,
       callBlockAction,
+      blockKey,
     }
   }
 }
 </script>
+
+<style lang="sass">
+.block-toolbar
+  background-color: rgba(0, 0, 0, 0.05)
+</style>
