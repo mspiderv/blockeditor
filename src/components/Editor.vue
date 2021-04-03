@@ -15,36 +15,54 @@
         >
           <!-- Tools -->
           <template #header>
-            <q-toolbar class="q-px-sm">
-              <q-btn
-                flat
-                round
-                v-for="(block, blockName) of blocks"
-                :key="blockName"
-                :icon="block.describeBlock().icon"
-                @click="createBlock(blockName)"
-              >
-                <q-tooltip>{{ block.describeBlock().name }}</q-tooltip>
-              </q-btn>
+            <q-toolbar class="q-px-sm bg-grey-4 justify-between">
+              <!-- Left buttons -->
+              <div>
+                <q-btn
+                  flat
+                  round
+                  stretch
+                  v-for="(block, blockName) of blocks"
+                  :key="blockName"
+                  :icon="block.describeBlock().icon"
+                  @click="createBlock(blockName)"
+                >
+                  <q-tooltip>{{ block.describeBlock().name }}</q-tooltip>
+                </q-btn>
+              </div>
+              <!-- Right buttons -->
+              <div>
+                <q-btn
+                  flat
+                  round
+                  stretch
+                  icon="clear_all"
+                  @click="deleteAllBlocks()"
+                >
+                  <q-tooltip>Delete all blocks</q-tooltip>
+                </q-btn>
+              </div>
             </q-toolbar>
           </template>
           <!-- Render blocks -->
           <template #item="{ element, index }">
-            <div :class="{ 'invisible-block': !element.visible }">
+            <div :class="{ 'invisible-block': withVisibility && !element.visible }">
               <!-- Header -->
               <q-toolbar class="q-px-sm justify-between block-toolbar">
                 <div>
                   <q-icon size="sm" name="drag_handle" class="q-ml-xs cursor-pointer draggable-handle" />
-                  <span class="text-bold q-mx-md">Paragraph</span>
+                  <span class="text-bold q-mx-md">{{ blocks[element.type].describeBlock().name }}</span>
                   <!-- Actions -->
                   <q-btn
                     v-for="(action, actionName) of blocks[element.type].describeBlock().actions"
                     flat
                     round
                     size="sm"
-                    v-bind="action"
+                    v-bind="action.btn"
                     @click="callBlockAction(element, index, actionName)"
-                  />
+                  >
+                    <q-tooltip v-if="action.tooltip">{{ action.tooltip }}</q-tooltip>
+                  </q-btn>
                 </div>
                 <div>
                   <q-toggle
@@ -52,13 +70,14 @@
                     checked-icon="visibility"
                     unchecked-icon="visibility_off"
                     color="positive"
+                    v-if="withVisibility"
                   >
                     <q-tooltip>Block is {{ element.visible ? 'visible' : 'invisible' }}</q-tooltip>
                   </q-toggle>
                   <q-btn flat round size="sm" icon="content_copy" @click="copyBlock(element, index)">
                     <q-tooltip>Copy block</q-tooltip>
                   </q-btn>
-                  <q-btn flat round size="sm" icon="delete" @click="deleteBlock(element, index)">
+                  <q-btn flat round size="sm" icon="close" @click="deleteBlock(element, index)">
                     <q-tooltip>Delete block</q-tooltip>
                   </q-btn>
                 </div>
@@ -102,6 +121,10 @@ export default {
     draggableGroup: {
       type: String,
       default: 'blockeditor-group',
+    },
+    withVisibility: {
+      type: Boolean,
+      default: false
     }
   },
   setup (props, ctx) {
@@ -114,13 +137,19 @@ export default {
     }
 
     function createBlock (blockName) {
+      const cfg = props.blocks[blockName].describeBlock()
+      let newBlock = {
+        type: blockName,
+      }
+      if (props.withVisibility) {
+        newBlock.visible = cfg.defaultVisibility ?? true
+      }
+      if (cfg.hasOwnProperty('defaultValue')) {
+        newBlock.data = cfg.defaultValue
+      }
       ctx.emit('update:modelValue', [
         ...props.modelValue,
-        {
-          type: blockName,
-          data: props.blocks[blockName].describeBlock().defaultValue ?? null,
-          visible: props.blocks[blockName].describeBlock().defaultVisibility ?? true,
-        }
+        newBlock
       ])
     }
 
@@ -148,6 +177,24 @@ export default {
       })
     }
 
+    function deleteAllBlocks () {
+      $q.dialog({
+        title: 'Delete all blocks ?',
+        message: 'Do you really want to delete all blocks ?',
+        cancel: {
+          color: 'grey-7',
+          flat: true,
+        },
+        ok: {
+          label: 'Delete',
+          color: 'negative',
+          flat: true,
+        }
+      }).onOk(() => {
+        ctx.emit('update:modelValue', [])
+      })
+    }
+
     function setBlockRef (index, ref) {
       blockRefs[index] = ref
     }
@@ -164,6 +211,7 @@ export default {
       createBlock,
       copyBlock,
       deleteBlock,
+      deleteAllBlocks,
       setBlockRef,
       callBlockAction,
       blockKey,

@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'ParagraphComponent',
+  name: 'HTMLComponent',
   emits: ['update:modelValue'],
   props: {
     modelValue: {
@@ -19,9 +19,9 @@ export default {
   },
   describeBlock () {
     return {
-      name: 'Paragraph',
-      icon: 'title',
-      defaultValue: 'this is default value',
+      name: 'HTML',
+      icon: 'code',
+      defaultValue: '',
     }
   }
 }
@@ -35,3 +35,4 @@ export default {
   textarea
     padding-bottom: 0
 </style>
+
