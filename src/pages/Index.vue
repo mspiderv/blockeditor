@@ -49,7 +49,7 @@ export default defineComponent({
       },
       {
         "type": "HTML",
-        "data": "<div>\n\ttest\n</div>",
+        "data": "<div class=\"test\">\n\ttest\n</div>",
         "visible": true
       }
     ])

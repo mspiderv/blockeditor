@@ -1,15 +1,39 @@
 <template>
-  <q-input
-    class="q-px-md custom-height"
-    borderless
-    autogrow
-    :model-value="modelValue"
-    @update:model-value="$emit('update:modelValue', $event)"
-  />
+  <div ref="editor" class="editor"></div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
+
+// CodeMirror
+import { keymap } from '@codemirror/view'
+import { defaultTabBinding } from '@codemirror/commands'
+import { EditorState, EditorView, basicSetup } from '@codemirror/basic-setup'
+
+// Theme
+let theme = EditorView.theme({
+  "&": {
+    fontSize: '1.1em',
+  },
+  ".cm-line": {
+    lineHeight: '2em',
+  },
+}, { dark: false })
+
+// Langs
+import { html } from '@codemirror/lang-html'
+import { css } from '@codemirror/lang-css'
+import { json } from '@codemirror/lang-json'
+import { xml } from '@codemirror/lang-xml'
+import { javascript } from '@codemirror/lang-javascript'
+
+const langs = {
+  html,
+  css,
+  json,
+  xml,
+  javascript,
+}
 
 export default defineComponent({
   name: 'HTMLComponent',
@@ -17,6 +41,39 @@ export default defineComponent({
   props: {
     modelValue: {
       type: String,
+    },
+    lang: {
+      type: String,
+      default: 'html'
+    }
+  },
+  setup (props, ctx) {
+    const editor = ref(null)
+
+    onMounted(() => {
+      const updateModelValue = EditorView.updateListener.of(({ state }) => {
+        ctx.emit('update:modelValue', state.toJSON().doc)
+      })
+
+      const startState = EditorState.create({
+        doc: props.modelValue,
+        extensions: [
+          theme,
+          basicSetup,
+          keymap.of([defaultTabBinding]),
+          langs[props.lang](),
+          updateModelValue,
+        ],
+      })
+
+      const view = new EditorView({
+        state: startState,
+        parent: editor.value,
+      })
+    })
+
+    return {
+      editor,
     }
   },
   describeBlock () {
@@ -30,11 +87,10 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.custom-height ::v-deep(.q-field__control-container)
-  padding-top: 19px
-  padding-bottom: 16px
+.editor ::v-deep(*)
+  outline: none!important
 
-  textarea
-    padding-bottom: 0
+.editor ::v-deep(.cm-editor .cm-content)
+  cursor: text
 </style>
 
