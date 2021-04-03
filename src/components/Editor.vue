@@ -30,7 +30,7 @@
           </template>
           <!-- Render blocks -->
           <template #item="{ element, index }">
-            <div>
+            <div :class="{ 'invisible-block': !element.visible }">
               <!-- Header -->
               <q-toolbar class="q-px-sm justify-between block-toolbar">
                 <div>
@@ -47,6 +47,14 @@
                   />
                 </div>
                 <div>
+                  <q-toggle
+                    v-model="element.visible"
+                    checked-icon="visibility"
+                    unchecked-icon="visibility_off"
+                    color="positive"
+                  >
+                    <q-tooltip>Block is {{ element.visible ? 'visible' : 'invisible' }}</q-tooltip>
+                  </q-toggle>
                   <q-btn flat round size="sm" icon="content_copy" @click="copyBlock(element, index)">
                     <q-tooltip>Copy block</q-tooltip>
                   </q-btn>
@@ -106,12 +114,12 @@ export default {
     }
 
     function createBlock (blockName) {
-      console.log('createBlock', blockName)
       ctx.emit('update:modelValue', [
         ...props.modelValue,
         {
           type: blockName,
-          data: props.blocks[blockName].describeBlock().defaultValue || null,
+          data: props.blocks[blockName].describeBlock().defaultValue ?? null,
+          visible: props.blocks[blockName].describeBlock().defaultVisibility ?? true,
         }
       ])
     }
@@ -164,7 +172,10 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .block-toolbar
   background-color: rgba(0, 0, 0, 0.05)
+
+.invisible-block
+  opacity: 0.5
 </style>
