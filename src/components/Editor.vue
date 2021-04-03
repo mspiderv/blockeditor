@@ -36,6 +36,7 @@
                   round
                   icon="copy_all"
                   v-if="withCopy"
+                  :disable="modelValue.length === 0"
                   @click="copyAllBlocks()"
                 >
                   <q-tooltip>Copy content</q-tooltip>
@@ -67,7 +68,7 @@
               <!-- Header -->
               <q-toolbar class="q-px-sm justify-between block-toolbar">
                 <div>
-                  <q-icon size="sm" name="drag_handle" class="q-ml-xs cursor-pointer draggable-handle" />
+                  <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />
                   <span class="text-bold q-mx-md">{{ blocks[element.type].describeBlock().name }}</span>
                   <!-- Actions -->
                   <q-btn
