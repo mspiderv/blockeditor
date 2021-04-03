@@ -4,6 +4,7 @@
     borderless
     autogrow
     :model-value="modelValue"
+    placeholder="Type here ..."
     @update:model-value="$emit('update:modelValue', $event)"
   />
 </template>
@@ -22,8 +23,8 @@ export default defineComponent({
   describeBlock () {
     return {
       name: 'Paragraph',
-      icon: 'title',
-      defaultValue: 'this is default value',
+      icon: 'subject',
+      defaultValue: '',
     }
   }
 })
