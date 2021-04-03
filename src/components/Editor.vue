@@ -53,6 +53,7 @@
                   flat
                   round
                   icon="clear_all"
+                  :disable="modelValue.length === 0"
                   @click="deleteAllBlocks()"
                 >
                   <q-tooltip>Delete all blocks</q-tooltip>
