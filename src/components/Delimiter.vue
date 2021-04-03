@@ -8,7 +8,7 @@ export default defineComponent({
   describeBlock () {
     return {
       name: 'Delimiter',
-      icon: 'remove',
+      icon: 'horizontal_rule',
     }
   }
 })

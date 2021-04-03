@@ -39,6 +39,7 @@ import Example from 'components/Example'
 import Paragraph from 'components/Paragraph'
 import Delimiter from 'components/Delimiter'
 import HTML from 'components/HTML'
+import Wysiwyg from 'components/Wysiwyg'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -49,10 +50,11 @@ export default defineComponent({
     const value = ref([])
     const value2 = ref([])
     const blocks = {
-      Example,
       Paragraph,
+      Wysiwyg,
       Delimiter,
       HTML,
+      Example,
     }
 
     return {
