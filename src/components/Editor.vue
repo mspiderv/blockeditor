@@ -100,8 +100,9 @@
 <script>
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'BlockEditorComponent',
   emits: [
     'update:modelValue',
@@ -217,7 +218,7 @@ export default {
       blockKey,
     }
   }
-}
+})
 </script>
 
 <style lang="sass" scoped>

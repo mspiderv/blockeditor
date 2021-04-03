@@ -9,7 +9,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
   name: 'HTMLComponent',
   emits: ['update:modelValue'],
   props: {
@@ -24,7 +26,7 @@ export default {
       defaultValue: '',
     }
   }
-}
+})
 </script>
 
 <style lang="sass" scoped>
