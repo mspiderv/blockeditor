@@ -20,7 +20,20 @@ export default defineComponent({
     Editor,
   },
   setup () {
-    const value = ref([])
+    const value = ref([
+      {
+        "type": "Paragraph",
+        "data": "this is default value"
+      },
+      {
+        "type": "Paragraph",
+        "data": "this is default value"
+      },
+      {
+        "type": "Paragraph",
+        "data": "this is default value"
+      }
+    ])
     const blocks = {
       Paragraph,
     }
