@@ -4,7 +4,7 @@
       <editor
         class="col"
         with-visibility
-        label="Test label"
+        label="My first editor"
         :blocks="blocks"
         v-model="value"
       />
@@ -14,12 +14,27 @@
         </q-card-section>
       </q-card>
     </div>
+    <div class="row q-gutter-x-lg">
+      <editor
+        class="col"
+        with-visibility
+        label="My second editor"
+        :blocks="blocks"
+        v-model="value2"
+      />
+      <q-card dark class="col q-mt-lg">
+        <q-card-section>
+          <pre>value: {{ value2 }}</pre>
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
 <script>
 import Editor from 'components/Editor'
 import { defineComponent, ref } from 'vue'
+
 import Example from 'components/Example'
 import Paragraph from 'components/Paragraph'
 import Delimiter from 'components/Delimiter'
@@ -31,28 +46,8 @@ export default defineComponent({
     Editor,
   },
   setup () {
-    const value = ref([
-      {
-        "type": "Paragraph",
-        "data": "this is default value 1",
-        "visible": true
-      },
-      {
-        "type": "Paragraph",
-        "data": "this is default value 2",
-        "visible": true
-      },
-      {
-        "type": "Paragraph",
-        "data": "this is default value 3",
-        "visible": true
-      },
-      {
-        "type": "HTML",
-        "data": "<div class=\"test\">\n\ttest\n</div>",
-        "visible": true
-      }
-    ])
+    const value = ref([])
+    const value2 = ref([])
     const blocks = {
       Example,
       Paragraph,
@@ -62,6 +57,7 @@ export default defineComponent({
 
     return {
       value,
+      value2,
       blocks,
     }
   }

@@ -7,7 +7,7 @@
       <q-card class="full-width q-mt-sm">
         <draggable
           :group="draggableGroup"
-          v-model="modelValue"
+          :list="modelValue"
           handle=".draggable-handle"
           :item-key="blockKey"
           ghost-class="bg-grey-6"
@@ -15,13 +15,12 @@
         >
           <!-- Tools -->
           <template #header>
-            <q-toolbar class="q-px-sm bg-grey-4 justify-between">
+            <q-toolbar class="q-px-sm justify-between">
               <!-- Left buttons -->
               <div>
                 <q-btn
                   flat
                   round
-                  stretch
                   v-for="(block, blockName) of blocks"
                   :key="blockName"
                   :icon="block.describeBlock().icon"
@@ -35,7 +34,6 @@
                 <q-btn
                   flat
                   round
-                  stretch
                   icon="clear_all"
                   @click="deleteAllBlocks()"
                 >
@@ -98,6 +96,10 @@
 </template>
 
 <script>
+/*
+  TODO:
+    - aby som mohol dat nejako "Ctrl+A" a v inom editore "Ctrl+V"  (nejaky export/import do JSONu ?)
+*/
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent } from 'vue'
@@ -133,8 +135,7 @@ export default defineComponent({
     const blockRefs = {}
 
     function cloneBlockData (data) {
-      // TODO: deep object clone
-      return { ... data }
+      return JSON.parse(JSON.stringify(data))
     }
 
     function createBlock (blockName) {
