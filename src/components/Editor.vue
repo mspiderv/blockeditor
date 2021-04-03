@@ -104,6 +104,8 @@ import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent } from 'vue'
 
+let nextEditorId = 1
+
 export default defineComponent({
   name: 'BlockEditorComponent',
   emits: [
@@ -123,7 +125,9 @@ export default defineComponent({
     },
     draggableGroup: {
       type: String,
-      default: 'blockeditor-group',
+      default () {
+        return `blockeditor-group-${nextEditorId++}`
+      },
     },
     withVisibility: {
       type: Boolean,

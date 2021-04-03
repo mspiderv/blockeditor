@@ -3,6 +3,7 @@
     <div class="row q-gutter-x-lg">
       <editor
         class="col"
+        draggable-group="my-group"
         with-visibility
         label="My first editor"
         :blocks="blocks"
@@ -17,6 +18,7 @@
     <div class="row q-gutter-x-lg">
       <editor
         class="col"
+        draggable-group="my-group"
         with-visibility
         label="My second editor"
         :blocks="blocks"
@@ -35,11 +37,10 @@
 import Editor from 'components/Editor'
 import { defineComponent, ref } from 'vue'
 
-import Example from 'components/Example'
 import Paragraph from 'components/Paragraph'
+import Wysiwyg from 'components/Wysiwyg'
 import Delimiter from 'components/Delimiter'
 import HTML from 'components/HTML'
-import Wysiwyg from 'components/Wysiwyg'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -54,7 +55,6 @@ export default defineComponent({
       Wysiwyg,
       Delimiter,
       HTML,
-      Example,
     }
 
     return {
