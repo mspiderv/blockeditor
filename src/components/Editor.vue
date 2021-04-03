@@ -114,10 +114,6 @@
 </template>
 
 <script>
-/*
-  TODO:
-    - aby som mohol dat nejako "Ctrl+A" a v inom editore "Ctrl+V"  (nejaky export/import do JSONu ?)
-*/
 import copy from 'clipboard-copy'
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
