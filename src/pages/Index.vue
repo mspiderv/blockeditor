@@ -5,6 +5,8 @@
         class="col"
         draggable-group="my-group"
         with-visibility
+        with-copy
+        with-paste
         label="My first editor"
         :blocks="blocks"
         v-model="value"
@@ -20,6 +22,8 @@
         class="col"
         draggable-group="my-group"
         with-visibility
+        with-copy
+        with-paste
         label="My second editor"
         :blocks="blocks"
         v-model="value2"

@@ -11,7 +11,7 @@
           handle=".draggable-handle"
           :item-key="blockKey"
           ghost-class="bg-grey-6"
-          @update="$emit('update:modelValue', modelValue)"
+          @update="update(modelValue)"
         >
           <!-- Tools -->
           <template #header>
@@ -31,6 +31,24 @@
               </div>
               <!-- Right buttons -->
               <div>
+                <q-btn
+                  flat
+                  round
+                  icon="copy_all"
+                  v-if="withCopy"
+                  @click="copyAllBlocks()"
+                >
+                  <q-tooltip>Copy content</q-tooltip>
+                </q-btn>
+                <q-btn
+                  flat
+                  round
+                  icon="content_paste"
+                  v-if="withPaste"
+                  @click="pasteContent()"
+                >
+                  <q-tooltip>Paste content</q-tooltip>
+                </q-btn>
                 <q-btn
                   flat
                   round
@@ -100,11 +118,13 @@
   TODO:
     - aby som mohol dat nejako "Ctrl+A" a v inom editore "Ctrl+V"  (nejaky export/import do JSONu ?)
 */
+import copy from 'clipboard-copy'
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent } from 'vue'
 
 let nextEditorId = 1
+const clipboardPrefix = 'block-editor-content:'
 
 export default defineComponent({
   name: 'BlockEditorComponent',
@@ -128,6 +148,14 @@ export default defineComponent({
       default () {
         return `blockeditor-group-${nextEditorId++}`
       },
+    },
+    withCopy: {
+      type: Boolean,
+      default: false
+    },
+    withPaste: {
+      type: Boolean,
+      default: false
     },
     withVisibility: {
       type: Boolean,
@@ -153,7 +181,7 @@ export default defineComponent({
       if (cfg.hasOwnProperty('defaultValue')) {
         newBlock.data = cfg.defaultValue
       }
-      ctx.emit('update:modelValue', [
+      update([
         ...props.modelValue,
         newBlock
       ])
@@ -162,7 +190,7 @@ export default defineComponent({
     function copyBlock (block, index) {
       const value = [...props.modelValue]
       value.splice(index, 0, cloneBlockData(block))
-      ctx.emit('update:modelValue', value)
+      update(value)
     }
 
     function deleteBlock (block, index) {
@@ -179,7 +207,7 @@ export default defineComponent({
           flat: true,
         }
       }).onOk(() => {
-        ctx.emit('update:modelValue', props.modelValue.filter((block, indexToDelete) => index !== indexToDelete))
+        update(props.modelValue.filter((block, indexToDelete) => index !== indexToDelete))
       })
     }
 
@@ -197,8 +225,12 @@ export default defineComponent({
           flat: true,
         }
       }).onOk(() => {
-        ctx.emit('update:modelValue', [])
+        update([])
       })
+    }
+
+    function update (value) {
+      ctx.emit('update:modelValue', value)
     }
 
     function setBlockRef (index, ref) {
@@ -213,7 +245,45 @@ export default defineComponent({
       return props.modelValue.indexOf(block)
     }
 
+    function toJSON () {
+      return clipboardPrefix + JSON.stringify(props.modelValue)
+    }
+
+    async function copyAllBlocks () {
+      await copy(toJSON())
+      $q.notify({
+        color: 'positive',
+        message: 'Content copied !',
+      })
+    }
+
+    function pasteContent () {
+      $q.dialog({
+        title: 'Paste content',
+        message: 'You can paste the previously copied content here:',
+        prompt: {
+          model: '',
+          type: 'text',
+        },
+        cancel: true,
+      }).onOk(content => {
+        try {
+          if (!content.startsWith(clipboardPrefix)) throw new Error()
+          const parsed = JSON.parse(content.substr(clipboardPrefix.length))
+          if (!Array.isArray(parsed)) throw new Error()
+          update(parsed)
+        } catch (e) {
+          $q.notify({
+            color: 'negative',
+            message: 'Content pasting failed. Make sure that the content you are pasting was previously received using the "Copy content" functionality.',
+          })
+        }
+      })
+    }
+
     return {
+      update,
+      toJSON,
       createBlock,
       copyBlock,
       deleteBlock,
@@ -221,6 +291,8 @@ export default defineComponent({
       setBlockRef,
       callBlockAction,
       blockKey,
+      copyAllBlocks,
+      pasteContent,
     }
   }
 })
