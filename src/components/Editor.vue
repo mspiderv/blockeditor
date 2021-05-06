@@ -123,6 +123,7 @@
 // TODO: [AccordionBlock]
 // TODO: [AlertBlock]
 // TODO: [ButtonBlock]
+// TODO: ked mam napr. prazdny Paragraf a chcem ho zmazat tak to vyhodi confirm, ale pre prazdny paragraf je ten confirm nepodstatny
 
 import copy from 'clipboard-copy'
 import { useQuasar } from 'quasar'

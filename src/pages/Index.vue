@@ -53,7 +53,56 @@ export default defineComponent({
     Editor,
   },
   setup () {
-    const value = ref([])
+    const value = ref([
+      {
+        "type": "Heading",
+        "visible": true,
+        "data": {
+          "level": 1,
+          "text": "Čarovná galéria"
+        }
+      },
+      {
+        "type": "Heading",
+        "visible": true,
+        "data": {
+          "level": 2,
+          "text": "Prečo si vybrať nás ?"
+        }
+      },
+      {
+        "type": "Wysiwyg",
+        "visible": true,
+        "data": "A teraz rich text"
+      },
+      {
+        "type": "Paragraph",
+        "visible": true,
+        "data": "Toto je nejaký super text\n\nAko sa máš ?"
+      },
+      {
+        "type": "HTML",
+        "visible": true,
+        "data": "kus html kódu"
+      },
+      {
+        "type": "Delimiter",
+        "visible": true
+      },
+      {
+        "type": "Heading",
+        "visible": true,
+        "data": {
+          "level": 2,
+          "text": "Nejaký ďalší nadpis"
+        }
+      },
+      {
+        "type": "Paragraph",
+        "visible": true,
+        "data": "A ďalší text"
+      }
+    ])
     const value2 = ref([])
     const blocks = {
       Heading,
