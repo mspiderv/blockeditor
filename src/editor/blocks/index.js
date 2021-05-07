@@ -1,0 +1,5 @@
+export { default as Heading } from './Heading'
+export { default as Paragraph } from './Paragraph'
+export { default as Wysiwyg } from './Wysiwyg'
+export { default as Delimiter } from './Delimiter'
+export { default as HTML } from './HTML'

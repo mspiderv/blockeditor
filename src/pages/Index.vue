@@ -8,7 +8,6 @@
         with-copy
         with-paste
         label="My first editor"
-        :blocks="basicBlocks"
         v-model="value"
       />
       <q-card dark class="col q-mt-lg">
@@ -25,7 +24,6 @@
         with-copy
         with-paste
         label="My second editor"
-        :blocks="basicBlocks"
         v-model="value2"
       />
       <q-card dark class="col q-mt-lg">
@@ -38,8 +36,8 @@
 </template>
 
 <script>
+import Editor from 'src/editor/Editor'
 import { defineComponent, ref } from 'vue'
-import Editor, { basicBlocks } from 'components/Editor'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -102,7 +100,6 @@ export default defineComponent({
     return {
       value,
       value2,
-      basicBlocks,
     }
   }
 })

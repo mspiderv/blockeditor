@@ -5,6 +5,16 @@
   >
     <template v-slot:control>
       <q-card class="full-width q-mt-sm">
+        <editor-toolbar
+          :blocks="blocks"
+          :model-value="modelValue"
+          :with-copy="withCopy"
+          :with-paste="withPaste"
+          @create-block="createBlock"
+          @copy-all-blocks="copyAllBlocks"
+          @paste-content="pasteContent"
+          @delete-all-blocks="deleteAllBlocks"
+        />
         <draggable
           :group="draggableGroup"
           :list="modelValue"
@@ -13,55 +23,6 @@
           ghost-class="bg-grey-6"
           @update="update(modelValue)"
         >
-          <!-- Tools -->
-          <template #header>
-            <q-toolbar class="q-px-sm justify-between">
-              <!-- Left buttons -->
-              <div>
-                <q-btn
-                  flat
-                  round
-                  v-for="(block, blockName) of blocks"
-                  :key="blockName"
-                  :icon="block.blockDefinition.icon"
-                  @click="createBlock(blockName)"
-                >
-                  <q-tooltip>{{ block.blockDefinition.name }}</q-tooltip>
-                </q-btn>
-              </div>
-              <!-- Right buttons -->
-              <div>
-                <q-btn
-                  flat
-                  round
-                  icon="copy_all"
-                  v-if="withCopy"
-                  :disable="modelValue.length === 0"
-                  @click="copyAllBlocks()"
-                >
-                  <q-tooltip>Copy all blocks</q-tooltip>
-                </q-btn>
-                <q-btn
-                  flat
-                  round
-                  icon="content_paste"
-                  v-if="withPaste"
-                  @click="pasteContent()"
-                >
-                  <q-tooltip>Paste content</q-tooltip>
-                </q-btn>
-                <q-btn
-                  flat
-                  round
-                  icon="clear_all"
-                  :disable="modelValue.length === 0"
-                  @click="deleteAllBlocks()"
-                >
-                  <q-tooltip>Delete all blocks</q-tooltip>
-                </q-btn>
-              </div>
-            </q-toolbar>
-          </template>
           <!-- Render blocks -->
           <template #item="{ element, index }">
             <div :class="{ 'invisible-block': withVisibility && !element.visible }">
@@ -120,25 +81,14 @@
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent, reactive } from 'vue'
+import EditorToolbar from './EditorToolbar'
 
 // Copy
 import copy from 'clipboard-copy'
 let nextEditorId = 1
 const clipboardPrefix = 'block-editor-content:'
 
-// Export Basic Blocks
-import Heading from 'components/Heading'
-import Paragraph from 'components/Paragraph'
-import Wysiwyg from 'components/Wysiwyg'
-import Delimiter from 'components/Delimiter'
-import HTML from 'components/HTML'
-export const basicBlocks = {
-  Heading,
-  Paragraph,
-  Wysiwyg,
-  Delimiter,
-  HTML,
-}
+import * as allBlocks from './blocks'
 
 export default defineComponent({
   name: 'BlockEditorComponent',
@@ -147,11 +97,12 @@ export default defineComponent({
   ],
   components: {
     Draggable,
+    EditorToolbar,
   },
   props: {
     blocks: {
       type: Object,
-      required: true,
+      required: false,
     },
     modelValue: {
       type: Array,
@@ -180,12 +131,14 @@ export default defineComponent({
     const $q = useQuasar()
     const blockRefs = {}
 
+    const blocks = props.blocks || allBlocks
+
     function cloneBlockData (data) {
       return JSON.parse(JSON.stringify(data))
     }
 
     function createBlock (blockName) {
-      const cfg = props.blocks[blockName].blockDefinition
+      const cfg = blocks[blockName].blockDefinition
       let newBlock = {
         type: blockName,
       }
@@ -251,10 +204,6 @@ export default defineComponent({
       blockRefs[index] = ref
     }
 
-    function callBlockAction (block, index, actionName) {
-      blockRefs[index][actionName]()
-    }
-
     function blockKey (block) {
       return props.modelValue.indexOf(block)
     }
@@ -301,6 +250,7 @@ export default defineComponent({
     }
 
     return {
+      blocks,
       update,
       toJSON,
       createBlock,
@@ -308,7 +258,6 @@ export default defineComponent({
       deleteBlock,
       deleteAllBlocks,
       setBlockRef,
-      callBlockAction,
       blockKey,
       copyAllBlocks,
       pasteContent,
