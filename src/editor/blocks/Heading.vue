@@ -19,50 +19,25 @@
       :color="modelValue.level === level ? 'black' : 'grey'"
       @click="updateLevel(level)"
     />
-    <template v-if="config.align">
-      <q-separator vertical color="grey-4" class="q-mx-xs" inset="" />
-      <q-btn
-        flat
-        round
-        dense
-        icon="format_align_left"
-        :color="modelValue.align === 'left' ? 'black' : 'grey'"
-        @click="updateAlign('left')"
-      />
-      <q-btn
-        flat
-        round
-        dense
-        icon="format_align_center"
-        :color="modelValue.align === 'center' ? 'black' : 'grey'"
-        @click="updateAlign('center')"
-      />
-      <q-btn
-        flat
-        round
-        dense
-        icon="format_align_right"
-        :color="modelValue.align === 'right' ? 'black' : 'grey'"
-        @click="updateAlign('right')"
-      />
-      <q-btn
-        flat
-        round
-        dense
-        icon="format_align_justify"
-        :color="modelValue.align === 'justify' ? 'black' : 'grey'"
-        @click="updateAlign('justify')"
-      />
-    </template>
+    <q-separator vertical color="grey-4" class="q-mx-xs" inset="" v-if="config.align" />
+    <align
+      :config="config"
+      :model-value="modelValue"
+      @update:modelValue="update"
+    />
   </teleport>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import Align, { alignDefaultConfig, alignDefaultValue } from './actions/Align'
 
 export default defineComponent({
   name: 'HeadingComponent',
   emits: ['update:modelValue'],
+  components: {
+    Align,
+  },
   props: {
     actionsRef: {
       type: HTMLElement,
@@ -74,7 +49,7 @@ export default defineComponent({
     config: {
       type: Object,
       required: true,
-    }
+    },
   },
   setup (props, ctx) {
     function update (value) {
@@ -83,25 +58,15 @@ export default defineComponent({
 
     function updateText (text) {
       update({
-        ...(props.config.levels ? { level: props.modelValue.level } : {}),
-        ...(props.config.align ? { align: props.modelValue.align } : {}),
+        ...props.modelValue,
         text,
       })
     }
 
     function updateLevel (level) {
       update({
-        ...(props.config.levels ? { level } : {}),
-        ...(props.config.align ? { align: props.modelValue.align } : {}),
-        text: props.modelValue.text,
-      })
-    }
-
-    function updateAlign (align) {
-      update({
-        ...(props.config.levels ? { level: props.modelValue.level } : {}),
-        ...(props.config.align ? { align } : {}),
-        text: props.modelValue.text,
+        ...props.modelValue,
+        level,
       })
     }
 
@@ -109,7 +74,6 @@ export default defineComponent({
       update,
       updateText,
       updateLevel,
-      updateAlign,
     }
   },
   blockDefinition: {
@@ -118,13 +82,13 @@ export default defineComponent({
     icon: 'text_fields',
     defaultValue (config) {
       return {
+        ...alignDefaultValue(config),
         ...(config.levels ? { level: config.defaultLevel } : {}),
-        ...(config.align ? { align: 'left' } : {}),
         text: '',
       }
     },
     defaultConfig: {
-      align: true,
+      ...alignDefaultConfig,
       levels: true,
       defaultLevel: 1,
       maxLevel: 6,

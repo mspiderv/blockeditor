@@ -7,48 +7,25 @@
     :model-value="modelValue.text"
     @update:model-value="updateText"
   />
-  <teleport :to="actionsRef" v-if="config.align">
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_left"
-      :color="modelValue.align === 'left' ? 'black' : 'grey'"
-      @click="updateAlign('left')"
-    />
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_center"
-      :color="modelValue.align === 'center' ? 'black' : 'grey'"
-      @click="updateAlign('center')"
-    />
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_right"
-      :color="modelValue.align === 'right' ? 'black' : 'grey'"
-      @click="updateAlign('right')"
-    />
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_justify"
-      :color="modelValue.align === 'justify' ? 'black' : 'grey'"
-      @click="updateAlign('justify')"
+  <teleport :to="actionsRef">
+    <align
+      :config="config"
+      :model-value="modelValue"
+      @update:modelValue="update"
     />
   </teleport>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import Align, { alignDefaultConfig, alignDefaultValue } from './actions/Align'
 
 export default defineComponent({
   name: 'ParagraphComponent',
   emits: ['update:modelValue'],
+  components: {
+    Align,
+  },
   props: {
     actionsRef: {
       type: HTMLElement,
@@ -69,22 +46,14 @@ export default defineComponent({
 
     function updateText (text) {
       update({
-        ...(props.config.align ? { align: props.modelValue.align } : {}),
+        ...props.modelValue,
         text,
-      })
-    }
-
-    function updateAlign (align) {
-      update({
-        ...(props.config.align ? { align } : {}),
-        text: props.modelValue.text,
       })
     }
 
     return {
       update,
       updateText,
-      updateAlign,
     }
   },
   blockDefinition: {
@@ -93,12 +62,12 @@ export default defineComponent({
     icon: 'subject',
     defaultValue (config) {
       return {
-        ...(config.align ? { align: 'left' } : {}),
+        ...alignDefaultValue(config),
         text: '',
       }
     },
     defaultConfig: {
-      align: true,
+      ...alignDefaultConfig,
       placeholder: 'Type here...',
     }
   }
