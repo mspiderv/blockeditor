@@ -23,10 +23,8 @@
           ghost-class="bg-grey-6"
           @update="update(modelValue)"
         >
-          <!-- Render blocks -->
           <template #item="{ element, index }">
             <div :class="{ 'invisible-block': withVisibility && !element.visible }">
-              <!-- Header -->
               <editor-block-toolbar
                 :block-definition="blocks[element.type].blockDefinition"
                 :with-visibility="withVisibility"
@@ -41,11 +39,8 @@
                   <div :ref="ref => setActionsRef(index, ref)"></div>
                 </template>
               </editor-block-toolbar>
-
-              <!-- Content -->
               <component
                 v-if="actionRefs[index]"
-                :ref="ref => setBlockRef(index, ref)"
                 :is="blocks[element.type]"
                 v-model="element.data"
                 :actionsRef="actionRefs[index]"
@@ -70,15 +65,15 @@
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent, reactive } from 'vue'
+
+import * as allBlocks from './blocks'
+
 import EditorToolbar from './EditorToolbar'
 import EditorBlockToolbar from './EditorBlockToolbar'
 
-// Copy
 import copy from 'clipboard-copy'
 let nextEditorId = 1
 const clipboardPrefix = 'block-editor-content:'
-
-import * as allBlocks from './blocks'
 
 export default defineComponent({
   name: 'BlockEditorComponent',
@@ -120,7 +115,6 @@ export default defineComponent({
   },
   setup (props, ctx) {
     const $q = useQuasar()
-    const blockRefs = {}
 
     const blocks = props.blocks || allBlocks
 
@@ -191,10 +185,6 @@ export default defineComponent({
       ctx.emit('update:modelValue', value)
     }
 
-    function setBlockRef (index, ref) {
-      blockRefs[index] = ref
-    }
-
     function blockKey (block) {
       return props.modelValue.indexOf(block)
     }
@@ -248,7 +238,6 @@ export default defineComponent({
       duplicateBlock,
       deleteBlock,
       deleteAllBlocks,
-      setBlockRef,
       blockKey,
       copyAllBlocks,
       pasteContent,
