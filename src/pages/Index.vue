@@ -40,7 +40,7 @@
 <script>
 import Editor from 'src/editor/Editor'
 import { defineComponent, ref } from 'vue'
-import { Heading, Paragraph } from 'src/editor/blocks'
+import { Delimiter, Heading, HTML, Paragraph, Wysiwyg } from 'src/editor/blocks'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -111,12 +111,11 @@ export default defineComponent({
           align: false,
         }
       },
-      {
-        component: Heading,
-      },
-      {
-        component: Paragraph,
-      },
+      { component: Heading },
+      { component: Paragraph },
+      { component: Wysiwyg },
+      { component: Delimiter },
+      { component: HTML },
     ]
 
     return {
