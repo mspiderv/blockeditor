@@ -129,7 +129,7 @@ export default defineComponent({
       return JSON.parse(JSON.stringify(data))
     }
 
-    function createBlock (name) {
+    function createBlock ({ name }) {
       const blockDefinition = getBlockByName(name).component.blockDefinition
       let newBlock = {
         type: name,

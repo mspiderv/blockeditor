@@ -7,7 +7,7 @@
         v-for="block of blocks"
         :key="block.name"
         :icon="block.icon"
-        @click="$emit('createBlock', block.name)"
+        @click="$emit('createBlock', block)"
       >
         <q-tooltip>{{ block.title }}</q-tooltip>
       </q-btn>
