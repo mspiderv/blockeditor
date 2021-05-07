@@ -77,7 +77,8 @@ export default defineComponent({
     }
   },
   blockDefinition: {
-    name: 'HTML',
+    name: 'html',
+    title: 'HTML',
     icon: 'code',
     defaultValue: '',
   }

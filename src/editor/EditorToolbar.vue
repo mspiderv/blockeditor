@@ -4,12 +4,12 @@
       <q-btn
         flat
         round
-        v-for="(blockComponent, blockName) of blocks"
-        :key="blockName"
-        :icon="blockComponent.blockDefinition.icon"
-        @click="$emit('createBlock', blockName)"
+        v-for="block of blocks"
+        :key="block.type"
+        :icon="block.icon || block.component.blockDefinition.icon"
+        @click="$emit('createBlock', block.name || block.component.blockDefinition.name)"
       >
-        <q-tooltip>{{ blockComponent.blockDefinition.name }}</q-tooltip>
+        <q-tooltip>{{ block.title || block.component.blockDefinition.title }}</q-tooltip>
       </q-btn>
     </div>
     <div>
@@ -52,7 +52,7 @@ export default defineComponent({
   name: 'EditorToolbarComponent',
   props: {
     blocks: {
-      type: Object,
+      type: Array,
       required: true,
     },
     modelValue: {

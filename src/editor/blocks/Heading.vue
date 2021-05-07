@@ -18,39 +18,41 @@
       :color="modelValue.level === level ? 'black' : 'grey'"
       @click="updateLevel(level)"
     />
-    <q-separator vertical color="grey-4" class="q-mx-xs" inset="" />
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_left"
-      :color="modelValue.align === 'left' ? 'black' : 'grey'"
-      @click="updateAlign('left')"
-    />
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_center"
-      :color="modelValue.align === 'center' ? 'black' : 'grey'"
-      @click="updateAlign('center')"
-    />
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_right"
-      :color="modelValue.align === 'right' ? 'black' : 'grey'"
-      @click="updateAlign('right')"
-    />
-    <q-btn
-      flat
-      round
-      dense
-      icon="format_align_justify"
-      :color="modelValue.align === 'justify' ? 'black' : 'grey'"
-      @click="updateAlign('justify')"
-    />
+    <template v-if="config.align">
+      <q-separator vertical color="grey-4" class="q-mx-xs" inset="" />
+      <q-btn
+        flat
+        round
+        dense
+        icon="format_align_left"
+        :color="modelValue.align === 'left' ? 'black' : 'grey'"
+        @click="updateAlign('left')"
+      />
+      <q-btn
+        flat
+        round
+        dense
+        icon="format_align_center"
+        :color="modelValue.align === 'center' ? 'black' : 'grey'"
+        @click="updateAlign('center')"
+      />
+      <q-btn
+        flat
+        round
+        dense
+        icon="format_align_right"
+        :color="modelValue.align === 'right' ? 'black' : 'grey'"
+        @click="updateAlign('right')"
+      />
+      <q-btn
+        flat
+        round
+        dense
+        icon="format_align_justify"
+        :color="modelValue.align === 'justify' ? 'black' : 'grey'"
+        @click="updateAlign('justify')"
+      />
+    </template>
   </teleport>
 </template>
 
@@ -67,6 +69,10 @@ export default defineComponent({
     },
     modelValue: {
       type: Object,
+    },
+    config: {
+      type: Object,
+      required: true,
     }
   },
   setup (props, ctx) {
@@ -77,7 +83,7 @@ export default defineComponent({
     function updateText (text) {
       update({
         level: props.modelValue.level,
-        align: props.modelValue.align,
+        ...(props.config.align ? { align: props.modelValue.align } : {}),
         text,
       })
     }
@@ -85,7 +91,7 @@ export default defineComponent({
     function updateLevel (level) {
       update({
         level,
-        align: props.modelValue.align,
+        ...(props.config.align ? { align: props.modelValue.align } : {}),
         text: props.modelValue.text,
       })
     }
@@ -93,7 +99,7 @@ export default defineComponent({
     function updateAlign (align) {
       update({
         level: props.modelValue.level,
-        align,
+        ...(props.config.align ? { align } : {}),
         text: props.modelValue.text,
       })
     }
@@ -106,13 +112,19 @@ export default defineComponent({
     }
   },
   blockDefinition: {
-    name: 'Heading',
+    name: 'heading',
+    title: 'Heading',
     icon: 'text_fields',
-    defaultValue: {
-      level: 1,
-      align: 'left',
-      text: '',
+    defaultValue (config) {
+      return {
+        level: 1,
+        ...(config.align ? { align: 'left' } : {}),
+        text: '',
+      }
     },
+    defaultConfig: {
+      align: true,
+    }
   },
 })
 </script>

@@ -2,7 +2,7 @@
   <q-toolbar class="q-px-sm justify-between block-toolbar">
     <div class="row items-center">
       <slot name="prepend" />
-      <span class="text-bold q-mx-md">{{ blockDefinition.name }}</span>
+      <span class="text-bold q-mx-md">{{ title }}</span>
       <slot name="actions" />
     </div>
     <div>
@@ -38,8 +38,12 @@ export default defineComponent({
     'deleteBlock',
   ],
   props: {
-    blockDefinition: {
-      type: Object,
+    icon: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
       required: true,
     },
     withVisibility: {

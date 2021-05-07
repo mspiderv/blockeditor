@@ -2,6 +2,7 @@
   <q-page padding>
     <div class="row q-gutter-x-lg">
       <editor
+        :blocks="blocks"
         class="col"
         draggable-group="my-group"
         with-visibility
@@ -18,6 +19,7 @@
     </div>
     <div class="row q-gutter-x-lg">
       <editor
+        :blocks="blocks"
         class="col"
         draggable-group="my-group"
         with-visibility
@@ -38,6 +40,7 @@
 <script>
 import Editor from 'src/editor/Editor'
 import { defineComponent, ref } from 'vue'
+import { Heading, Paragraph } from 'src/editor/blocks'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -45,61 +48,81 @@ export default defineComponent({
     Editor,
   },
   setup () {
-    const value = ref([
-      {
-        "type": "Heading",
-        "visible": true,
-        "data": {
-          "level": 1,
-          "text": "Čarovná galéria"
-        }
-      },
-      {
-        "type": "Heading",
-        "visible": true,
-        "data": {
-          "level": 2,
-          "text": "Prečo si vybrať nás ?"
-        }
-      },
-      {
-        "type": "Wysiwyg",
-        "visible": true,
-        "data": "A teraz rich text"
-      },
-      {
-        "type": "Paragraph",
-        "visible": true,
-        "data": "Toto je nejaký super text\n\nAko sa máš ?"
-      },
-      {
-        "type": "HTML",
-        "visible": true,
-        "data": "kus html kódu"
-      },
-      {
-        "type": "Delimiter",
-        "visible": true
-      },
-      {
-        "type": "Heading",
-        "visible": true,
-        "data": {
-          "level": 2,
-          "text": "Nejaký ďalší nadpis"
-        }
-      },
-      {
-        "type": "Paragraph",
-        "visible": true,
-        "data": "A ďalší text"
-      }
-    ])
+    // const value = ref([
+    //   {
+    //     "type": "Heading",
+    //     "visible": true,
+    //     "data": {
+    //       "level": 1,
+    //       "text": "Čarovná galéria"
+    //     }
+    //   },
+    //   {
+    //     "type": "Heading",
+    //     "visible": true,
+    //     "data": {
+    //       "level": 2,
+    //       "text": "Prečo si vybrať nás ?"
+    //     }
+    //   },
+    //   {
+    //     "type": "Wysiwyg",
+    //     "visible": true,
+    //     "data": "A teraz rich text"
+    //   },
+    //   {
+    //     "type": "Paragraph",
+    //     "visible": true,
+    //     "data": "Toto je nejaký super text\n\nAko sa máš ?"
+    //   },
+    //   {
+    //     "type": "HTML",
+    //     "visible": true,
+    //     "data": "kus html kódu"
+    //   },
+    //   {
+    //     "type": "Delimiter",
+    //     "visible": true
+    //   },
+    //   {
+    //     "type": "Heading",
+    //     "visible": true,
+    //     "data": {
+    //       "level": 2,
+    //       "text": "Nejaký ďalší nadpis"
+    //     }
+    //   },
+    //   {
+    //     "type": "Paragraph",
+    //     "visible": true,
+    //     "data": "A ďalší text"
+    //   }
+    // ])
+    const value = ref([])
     const value2 = ref([])
+
+    const blocks = [
+      {
+        name: 'myCustomHeading',
+        title: 'My Custom Heading',
+        icon: 'face',
+        component: Heading,
+        config: {
+          align: false,
+        }
+      },
+      {
+        component: Heading,
+      },
+      {
+        component: Paragraph,
+      },
+    ]
 
     return {
       value,
       value2,
+      blocks,
     }
   }
 })

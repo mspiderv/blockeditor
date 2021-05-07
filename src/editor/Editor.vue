@@ -26,7 +26,8 @@
           <template #item="{ element, index }">
             <div :class="{ 'invisible-block': withVisibility && !element.visible }">
               <editor-block-toolbar
-                :block-definition="blocks[element.type].blockDefinition"
+                :icon="getBlockByName(element.type).icon ?? getBlockByName(element.type).component.blockDefinition.icon"
+                :title="getBlockByName(element.type).title ?? getBlockByName(element.type).component.blockDefinition.title"
                 :with-visibility="withVisibility"
                 v-model:visible="element.visible"
                 @duplicate-block="duplicateBlock(element, index)"
@@ -44,9 +45,10 @@
               </editor-block-toolbar>
               <component
                 v-if="actionRefs[index]"
-                :is="blocks[element.type]"
+                :is="getBlockByName(element.type).component"
                 v-model="element.data"
-                :actionsRef="actionRefs[index]"
+                :actions-ref="actionRefs[index]"
+                :config="getConfigForBlock(element.type)"
               />
             </div>
           </template>
@@ -69,7 +71,7 @@ import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent, reactive } from 'vue'
 
-import * as allBlocks from './blocks'
+// import * as allBlocks from './blocks'
 
 import EditorToolbar from './EditorToolbar'
 import EditorBlockToolbar from './EditorBlockToolbar'
@@ -90,8 +92,8 @@ export default defineComponent({
   },
   props: {
     blocks: {
-      type: Object,
-      required: false,
+      type: Array,
+      required: true,
     },
     modelValue: {
       type: Array,
@@ -119,22 +121,26 @@ export default defineComponent({
   setup (props, ctx) {
     const $q = useQuasar()
 
-    const blocks = props.blocks || allBlocks
+    function getBlockByName (name) {
+      return props.blocks.find((block) => block.name === name || (!block.name && block.component.blockDefinition.name === name))
+    }
 
     function cloneBlockData (data) {
       return JSON.parse(JSON.stringify(data))
     }
 
-    function createBlock (blockName) {
-      const cfg = blocks[blockName].blockDefinition
+    function createBlock (name) {
+      const blockDefinition = getBlockByName(name).component.blockDefinition
       let newBlock = {
-        type: blockName,
+        type: name,
       }
       if (props.withVisibility) {
-        newBlock.visible = cfg.defaultVisibility ?? true
+        newBlock.visible = blockDefinition.defaultVisibility ?? true
       }
-      if (cfg.hasOwnProperty('defaultValue')) {
-        newBlock.data = cfg.defaultValue
+      if (blockDefinition.hasOwnProperty('defaultValue')) {
+        newBlock.data = (typeof blockDefinition.defaultValue === 'function')
+          ? blockDefinition.defaultValue(getConfigForBlock(name))
+          : blockDefinition.defaultValue
       }
       update([
         ...props.modelValue,
@@ -228,13 +234,22 @@ export default defineComponent({
       })
     }
 
+    function getConfigForBlock (name) {
+      const block = getBlockByName(name)
+      // TODO: config deep merge ?
+      return {
+        ...block.component.blockDefinition.defaultConfig,
+        ...block.config
+      }
+    }
+
     const actionRefs = reactive({})
     function setActionsRef (index, ref) {
       actionRefs[index] = ref
     }
 
     return {
-      blocks,
+      getBlockByName,
       update,
       toJSON,
       createBlock,
@@ -244,7 +259,7 @@ export default defineComponent({
       blockKey,
       copyAllBlocks,
       pasteContent,
-
+      getConfigForBlock,
       setActionsRef,
       actionRefs,
     }

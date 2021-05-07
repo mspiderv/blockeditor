@@ -21,7 +21,8 @@ export default defineComponent({
     }
   },
   blockDefinition: {
-    name: 'Paragraph',
+    name: 'paragraph',
+    title: 'Paragraph',
     icon: 'subject',
     defaultValue: '',
   }

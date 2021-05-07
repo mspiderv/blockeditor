@@ -107,7 +107,8 @@ export default defineComponent({
     }
   },
   blockDefinition: {
-    name: 'Rich Text',
+    name: 'wysiwyg',
+    title: 'Rich Text',
     icon: 'wysiwyg',
     defaultValue: '',
   }
