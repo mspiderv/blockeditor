@@ -27,31 +27,20 @@
           <template #item="{ element, index }">
             <div :class="{ 'invisible-block': withVisibility && !element.visible }">
               <!-- Header -->
-              <q-toolbar class="q-px-sm justify-between block-toolbar">
-                <div class="row items-center">
+              <editor-block-toolbar
+                :block-definition="blocks[element.type].blockDefinition"
+                :with-visibility="withVisibility"
+                v-model:visible="element.visible"
+                @duplicate-block="duplicateBlock(element, index)"
+                @delete-block="deleteBlock(element, index)"
+              >
+                <template #prepend>
                   <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />
-                  <span class="text-bold q-mx-md">{{ blocks[element.type].blockDefinition.name }}</span>
-                  <!-- Actions -->
+                </template>
+                <template #actions>
                   <div :ref="ref => setActionsRef(index, ref)"></div>
-                </div>
-                <div>
-                  <q-toggle
-                    v-model="element.visible"
-                    checked-icon="visibility"
-                    unchecked-icon="visibility_off"
-                    color="grey-8"
-                    v-if="withVisibility"
-                  >
-                    <q-tooltip>Block is {{ element.visible ? 'visible' : 'invisible' }}</q-tooltip>
-                  </q-toggle>
-                  <q-btn flat round size="sm" icon="content_copy" @click="duplicateBlock(element, index)">
-                    <q-tooltip>Duplicate block</q-tooltip>
-                  </q-btn>
-                  <q-btn flat round size="sm" icon="close" @click="deleteBlock(element, index)">
-                    <q-tooltip>Delete block</q-tooltip>
-                  </q-btn>
-                </div>
-              </q-toolbar>
+                </template>
+              </editor-block-toolbar>
 
               <!-- Content -->
               <component
@@ -82,6 +71,7 @@ import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent, reactive } from 'vue'
 import EditorToolbar from './EditorToolbar'
+import EditorBlockToolbar from './EditorBlockToolbar'
 
 // Copy
 import copy from 'clipboard-copy'
@@ -98,6 +88,7 @@ export default defineComponent({
   components: {
     Draggable,
     EditorToolbar,
+    EditorBlockToolbar,
   },
   props: {
     blocks: {

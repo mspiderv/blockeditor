@@ -46,7 +46,9 @@
 </template>
 
 <script>
-export default {
+import { defineComponent} from 'vue'
+
+export default defineComponent({
   name: 'EditorToolbarComponent',
   props: {
     blocks: {
@@ -72,5 +74,5 @@ export default {
     'pasteContent',
     'deleteAllBlocks',
   ],
-}
+})
 </script>
