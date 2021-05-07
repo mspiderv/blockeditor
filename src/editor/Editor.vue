@@ -6,7 +6,7 @@
     <template v-slot:control>
       <q-card class="full-width q-mt-sm">
         <editor-toolbar
-          :blocks="blocks"
+          :blocks="blocksForToolbar"
           :model-value="modelValue"
           :with-copy="withCopy"
           :with-paste="withPaste"
@@ -69,7 +69,7 @@
 
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, computed } from 'vue'
 
 // import * as allBlocks from './blocks'
 
@@ -248,7 +248,16 @@ export default defineComponent({
       actionRefs[index] = ref
     }
 
+    const blocksForToolbar = computed(() => props.blocks.map((block) => {
+      return {
+        name: block.name ?? block.component.blockDefinition.name,
+        icon: block.icon ?? block.component.blockDefinition.icon,
+        title: block.title ?? block.component.blockDefinition.title,
+      }
+    }))
+
     return {
+      blocksForToolbar,
       getBlockByName,
       update,
       toJSON,

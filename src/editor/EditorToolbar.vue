@@ -6,10 +6,10 @@
         round
         v-for="block of blocks"
         :key="block.name"
-        :icon="block.icon || block.component.blockDefinition.icon"
-        @click="$emit('createBlock', block.name || block.component.blockDefinition.name)"
+        :icon="block.icon"
+        @click="$emit('createBlock', block.name)"
       >
-        <q-tooltip>{{ block.title || block.component.blockDefinition.title }}</q-tooltip>
+        <q-tooltip>{{ block.title }}</q-tooltip>
       </q-btn>
     </div>
     <div>
