@@ -8,7 +8,6 @@
     @update:model-value="updateText"
   />
   <teleport :to="actionsRef" v-if="config.align">
-    <q-separator vertical color="grey-4" class="q-mx-xs" inset="" />
     <q-btn
       flat
       round
