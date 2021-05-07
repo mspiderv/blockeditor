@@ -39,7 +39,7 @@
                   :disable="modelValue.length === 0"
                   @click="copyAllBlocks()"
                 >
-                  <q-tooltip>Copy content</q-tooltip>
+                  <q-tooltip>Copy all blocks</q-tooltip>
                 </q-btn>
                 <q-btn
                   flat
@@ -289,7 +289,7 @@ export default defineComponent({
         } catch (e) {
           $q.notify({
             color: 'negative',
-            message: 'Content pasting failed. Make sure that the content you are pasting was previously received using the "Copy content" functionality.',
+            message: 'Content pasting failed. Make sure that the content you are pasting was previously received using the "Copy" functionality.',
           })
         }
       })
