@@ -36,7 +36,10 @@
                   <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />
                 </template>
                 <template #actions>
-                  <div :ref="ref => setActionsRef(index, ref)"></div>
+                  <div
+                    class="row items-center"
+                    :ref="ref => setActionsRef(index, ref)"
+                  />
                 </template>
               </editor-block-toolbar>
               <component
