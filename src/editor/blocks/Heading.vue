@@ -18,6 +18,39 @@
       :color="modelValue.level === level ? 'black' : 'grey'"
       @click="updateLevel(level)"
     />
+    <q-separator vertical color="grey-4" class="q-mx-xs" inset="" />
+    <q-btn
+      flat
+      round
+      dense
+      icon="format_align_left"
+      :color="modelValue.align === 'left' ? 'black' : 'grey'"
+      @click="updateAlign('left')"
+    />
+    <q-btn
+      flat
+      round
+      dense
+      icon="format_align_center"
+      :color="modelValue.align === 'center' ? 'black' : 'grey'"
+      @click="updateAlign('center')"
+    />
+    <q-btn
+      flat
+      round
+      dense
+      icon="format_align_right"
+      :color="modelValue.align === 'right' ? 'black' : 'grey'"
+      @click="updateAlign('right')"
+    />
+    <q-btn
+      flat
+      round
+      dense
+      icon="format_align_justify"
+      :color="modelValue.align === 'justify' ? 'black' : 'grey'"
+      @click="updateAlign('justify')"
+    />
   </teleport>
 </template>
 
@@ -41,17 +74,27 @@ export default defineComponent({
       ctx.emit('update:modelValue', value)
     }
 
+    function updateText (text) {
+      update({
+        level: props.modelValue.level,
+        align: props.modelValue.align,
+        text,
+      })
+    }
+
     function updateLevel (level) {
       update({
         level,
+        align: props.modelValue.align,
         text: props.modelValue.text,
       })
     }
 
-    function updateText (text) {
+    function updateAlign (align) {
       update({
         level: props.modelValue.level,
-        text,
+        align,
+        text: props.modelValue.text,
       })
     }
 
@@ -59,6 +102,7 @@ export default defineComponent({
       update,
       updateText,
       updateLevel,
+      updateAlign,
     }
   },
   blockDefinition: {
@@ -66,6 +110,7 @@ export default defineComponent({
     icon: 'text_fields',
     defaultValue: {
       level: 1,
+      align: 'left',
       text: '',
     },
   },
