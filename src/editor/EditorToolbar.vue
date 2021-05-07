@@ -5,7 +5,7 @@
         flat
         round
         v-for="block of blocks"
-        :key="block.type"
+        :key="block.name"
         :icon="block.icon || block.component.blockDefinition.icon"
         @click="$emit('createBlock', block.name || block.component.blockDefinition.name)"
       >
