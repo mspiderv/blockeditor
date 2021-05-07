@@ -67,21 +67,11 @@
             <div :class="{ 'invisible-block': withVisibility && !element.visible }">
               <!-- Header -->
               <q-toolbar class="q-px-sm justify-between block-toolbar">
-                <div>
+                <div class="row items-center">
                   <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />
                   <span class="text-bold q-mx-md">{{ blocks[element.type].blockDefinition.name }}</span>
                   <!-- Actions -->
-                  <q-btn
-                    v-if="blocks[element.type].blockActions"
-                    v-for="(action, actionName) of blocks[element.type].blockActions(element.data)"
-                    flat
-                    round
-                    size="sm"
-                    v-bind="action.btn"
-                    @click="callBlockAction(element, index, actionName)"
-                  >
-                    <q-tooltip v-if="action.tooltip">{{ action.tooltip }}</q-tooltip>
-                  </q-btn>
+                  <div :ref="ref => setActionsRef(index, ref)"></div>
                 </div>
                 <div>
                   <q-toggle
@@ -104,9 +94,11 @@
 
               <!-- Content -->
               <component
+                v-if="actionRefs[index]"
                 :ref="ref => setBlockRef(index, ref)"
                 :is="blocks[element.type]"
                 v-model="element.data"
+                :actionsRef="actionRefs[index]"
               />
             </div>
           </template>
@@ -125,13 +117,28 @@
 // TODO: [ButtonBlock]
 // TODO: ked mam napr. prazdny Paragraf a chcem ho zmazat tak to vyhodi confirm, ale pre prazdny paragraf je ten confirm nepodstatny
 
-import copy from 'clipboard-copy'
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 
+// Copy
+import copy from 'clipboard-copy'
 let nextEditorId = 1
 const clipboardPrefix = 'block-editor-content:'
+
+// Export Basic Blocks
+import Heading from 'components/Heading'
+import Paragraph from 'components/Paragraph'
+import Wysiwyg from 'components/Wysiwyg'
+import Delimiter from 'components/Delimiter'
+import HTML from 'components/HTML'
+export const basicBlocks = {
+  Heading,
+  Paragraph,
+  Wysiwyg,
+  Delimiter,
+  HTML,
+}
 
 export default defineComponent({
   name: 'BlockEditorComponent',
@@ -288,6 +295,11 @@ export default defineComponent({
       })
     }
 
+    const actionRefs = reactive({})
+    function setActionsRef (index, ref) {
+      actionRefs[index] = ref
+    }
+
     return {
       update,
       toJSON,
@@ -300,6 +312,9 @@ export default defineComponent({
       blockKey,
       copyAllBlocks,
       pasteContent,
+
+      setActionsRef,
+      actionRefs,
     }
   }
 })

@@ -7,6 +7,18 @@
     placeholder="Type here ..."
     @update:model-value="updateText"
   />
+  <teleport :to="actionsRef">
+    <q-btn
+      v-for="level in 6"
+      :key="level"
+      flat
+      round
+      dense
+      :label="`H${level}`"
+      :color="modelValue.level === level ? 'black' : 'grey'"
+      @click="updateLevel(level)"
+    />
+  </teleport>
 </template>
 
 <script>
@@ -16,6 +28,10 @@ export default defineComponent({
   name: 'HeadingComponent',
   emits: ['update:modelValue'],
   props: {
+    actionsRef: {
+      type: HTMLElement,
+      required: true,
+    },
     modelValue: {
       type: Object,
     }
@@ -41,14 +57,8 @@ export default defineComponent({
 
     return {
       update,
-      updateLevel,
       updateText,
-      h1: updateLevel.bind(null, 1),
-      h2: updateLevel.bind(null, 2),
-      h3: updateLevel.bind(null, 3),
-      h4: updateLevel.bind(null, 4),
-      h5: updateLevel.bind(null, 5),
-      h6: updateLevel.bind(null, 6),
+      updateLevel,
     }
   },
   blockDefinition: {
@@ -59,16 +69,6 @@ export default defineComponent({
       text: '',
     },
   },
-  blockActions (value) {
-    return {
-      h1: { btn: { label: 'H1', size: 'md', color: value.level === 1 ? 'black' : 'grey' } },
-      h2: { btn: { label: 'H2', size: 'md', color: value.level === 2 ? 'black' : 'grey' } },
-      h3: { btn: { label: 'H3', size: 'md', color: value.level === 3 ? 'black' : 'grey' } },
-      h4: { btn: { label: 'H4', size: 'md', color: value.level === 4 ? 'black' : 'grey' } },
-      h5: { btn: { label: 'H5', size: 'md', color: value.level === 5 ? 'black' : 'grey' } },
-      h6: { btn: { label: 'H6', size: 'md', color: value.level === 6 ? 'black' : 'grey' } },
-    }
-  }
 })
 </script>
 
