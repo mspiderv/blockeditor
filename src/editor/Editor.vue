@@ -26,8 +26,8 @@
           <template #item="{ element, index }">
             <div :class="{ 'invisible-block': withVisibility && !element.visible }">
               <editor-block-toolbar
-                :icon="getBlockByName(element.type).icon ?? getBlockByName(element.type).component.blockDefinition.icon"
-                :title="getBlockByName(element.type).title ?? getBlockByName(element.type).component.blockDefinition.title"
+                :icon="resolveBlockIcon(element.type)"
+                :title="resolveBlockTitle(element.type)"
                 :with-visibility="withVisibility"
                 v-model:visible="element.visible"
                 @duplicate-block="duplicateBlock(element, index)"
@@ -70,8 +70,6 @@
 import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent, reactive, computed } from 'vue'
-
-// import * as allBlocks from './blocks'
 
 import EditorToolbar from './EditorToolbar'
 import EditorBlockToolbar from './EditorBlockToolbar'
@@ -121,14 +119,9 @@ export default defineComponent({
   setup (props, ctx) {
     const $q = useQuasar()
 
-    function getBlockByName (name) {
-      return props.blocks.find((block) => block.name === name || (!block.name && block.component.blockDefinition.name === name))
-    }
-
-    function cloneBlockData (data) {
-      return JSON.parse(JSON.stringify(data))
-    }
-
+    /*
+     * Manage blocks
+     */
     function createBlock ({ name }) {
       const blockDefinition = getBlockByName(name).component.blockDefinition
       let newBlock = {
@@ -190,20 +183,11 @@ export default defineComponent({
       })
     }
 
-    function update (value) {
-      ctx.emit('update:modelValue', value)
-    }
-
-    function blockKey (block) {
-      return props.modelValue.indexOf(block)
-    }
-
-    function toJSON () {
-      return clipboardPrefix + JSON.stringify(props.modelValue)
-    }
-
+    /*
+     * Copy & paste
+     */
     async function copyAllBlocks () {
-      await copy(toJSON())
+      await copy(clipboardPrefix + JSON.stringify(props.modelValue))
       $q.notify({
         color: 'positive',
         message: 'Content copied !',
@@ -234,6 +218,20 @@ export default defineComponent({
       })
     }
 
+    /*
+     * Draggable
+     */
+    function blockKey (block) {
+      return props.modelValue.indexOf(block)
+    }
+
+    /*
+     * Getters
+     */
+    function getBlockByName (name) {
+      return props.blocks.find((block) => block.name === name || (!block.name && block.component.blockDefinition.name === name))
+    }
+
     function getConfigForBlock (name) {
       const block = getBlockByName(name)
       // TODO: config deep merge ?
@@ -243,16 +241,48 @@ export default defineComponent({
       }
     }
 
+    /*
+     * Resolvers
+     */
+    function resolveBlockIcon (name) {
+      const block = getBlockByName(name)
+      return block.icon ?? block.component.blockDefinition.icon
+    }
+
+    function resolveBlockTitle (name) {
+      const block = getBlockByName(name)
+      return block.title ?? block.component.blockDefinition.title
+    }
+
+    /*
+     * Action refs
+     */
     const actionRefs = reactive({})
+
     function setActionsRef (index, ref) {
       actionRefs[index] = ref
     }
 
+    /*
+     * Helpers
+     */
+    function cloneBlockData (data) {
+      return JSON.parse(JSON.stringify(data))
+    }
+
+    function update (value) {
+      ctx.emit('update:modelValue', value)
+    }
+
+    /*
+     * Computed
+     */
     const blocksForToolbar = computed(() => props.blocks.map((block) => {
+      const name = block.name ?? block.component.blockDefinition.name
       return {
-        name: block.name ?? block.component.blockDefinition.name,
-        icon: block.icon ?? block.component.blockDefinition.icon,
-        title: block.title ?? block.component.blockDefinition.title,
+        name,
+        icon: resolveBlockIcon(name),
+        title: resolveBlockTitle(name),
       }
     }))
 
@@ -260,7 +290,6 @@ export default defineComponent({
       blocksForToolbar,
       getBlockByName,
       update,
-      toJSON,
       createBlock,
       duplicateBlock,
       deleteBlock,
@@ -271,6 +300,8 @@ export default defineComponent({
       getConfigForBlock,
       setActionsRef,
       actionRefs,
+      resolveBlockIcon,
+      resolveBlockTitle,
     }
   }
 })
