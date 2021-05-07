@@ -3,13 +3,14 @@
     class="q-px-md custom-height"
     borderless
     autogrow
+    :placeholder="config.placeholder"
     :model-value="modelValue.text"
-    placeholder="Type here ..."
     @update:model-value="updateText"
   />
   <teleport :to="actionsRef">
     <q-btn
-      v-for="level in 6"
+      v-if="config.levels"
+      v-for="level in config.maxLevel"
       :key="level"
       flat
       round
@@ -82,7 +83,7 @@ export default defineComponent({
 
     function updateText (text) {
       update({
-        level: props.modelValue.level,
+        ...(props.config.levels ? { level: props.modelValue.level } : {}),
         ...(props.config.align ? { align: props.modelValue.align } : {}),
         text,
       })
@@ -90,7 +91,7 @@ export default defineComponent({
 
     function updateLevel (level) {
       update({
-        level,
+        ...(props.config.levels ? { level } : {}),
         ...(props.config.align ? { align: props.modelValue.align } : {}),
         text: props.modelValue.text,
       })
@@ -98,7 +99,7 @@ export default defineComponent({
 
     function updateAlign (align) {
       update({
-        level: props.modelValue.level,
+        ...(props.config.levels ? { level: props.modelValue.level } : {}),
         ...(props.config.align ? { align } : {}),
         text: props.modelValue.text,
       })
@@ -117,13 +118,17 @@ export default defineComponent({
     icon: 'text_fields',
     defaultValue (config) {
       return {
-        level: 1,
+        ...(config.levels ? { level: config.defaultLevel } : {}),
         ...(config.align ? { align: 'left' } : {}),
         text: '',
       }
     },
     defaultConfig: {
       align: true,
+      levels: true,
+      defaultLevel: 1,
+      maxLevel: 6,
+      placeholder: 'Type here...',
     }
   },
 })

@@ -109,6 +109,8 @@ export default defineComponent({
         component: Heading,
         config: {
           align: false,
+          maxLevel: 3,
+          placeholder: 'custom placeholder',
         }
       },
       { component: Heading },
