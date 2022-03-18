@@ -54,7 +54,7 @@
       >
         <editor-block-toolbar
           icon=""
-          :title="`${index + 1}. section`"
+          :title="`${index + 1}. ${modelValue.direction}`"
           v-model:visible="element.visible"
           :with-copy="editorWithCopy"
           :with-paste="editorWithPaste"
