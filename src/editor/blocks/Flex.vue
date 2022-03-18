@@ -45,7 +45,7 @@
     @update="override()"
   >
     <template #item="{ element, index }">
-      <q-card class="item q-mx-md q-my-lg" flat>
+      <q-card class="item q-mx-sm q-mt-md q-mb-sm">
         <editor-block-toolbar
           icon=""
           :title="`${index + 1}. section`"
@@ -59,10 +59,12 @@
           </template>
         </editor-block-toolbar>
         <editor
+          style="margin-top: -15px;"
+          flat
+          class="q-px-sm"
           v-model="element.data"
           :blocks="editorBlocks"
           :draggable-group="editorDraggableGroup"
-          flat
           :with-copy="editorWithCopy"
           :with-paste="editorWithPaste"
           :with-visibility="editorWithVisibility"
