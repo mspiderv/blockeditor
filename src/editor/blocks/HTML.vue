@@ -49,6 +49,9 @@ export default defineComponent({
     defaultValue (config) {
       return ''
     },
+    shouldConfirmDelete (config, value) {
+      return value.length > 0
+    },
   },
   emits: withBlockEmits(),
   props: {

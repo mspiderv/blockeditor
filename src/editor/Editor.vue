@@ -146,22 +146,30 @@ export default defineComponent({
       update(value)
     }
 
-    function deleteBlock (block, index) {
-      $q.dialog({
-        title: 'Delete block ?',
-        message: 'Do you really want to delete this block ?',
-        cancel: {
-          color: 'grey-7',
-          flat: true,
-        },
-        ok: {
-          label: 'Delete',
-          color: 'negative',
-          flat: true,
-        }
-      }).onOk(() => {
-        update(props.modelValue.filter((block, indexToDelete) => index !== indexToDelete))
-      })
+    function doDeleteBlock (index) {
+      update(props.modelValue.filter((block, indexToDelete) => index !== indexToDelete))
+    }
+
+    function deleteBlock (element, index) {
+      if (getBlockByName(element.type).component.blockDefinition.shouldConfirmDelete(getConfigForBlock(element.type), element.data)) {
+        $q.dialog({
+          title: 'Delete block ?',
+          message: 'Do you really want to delete this block ?',
+          cancel: {
+            color: 'grey-7',
+            flat: true,
+          },
+          ok: {
+            label: 'Delete',
+            color: 'negative',
+            flat: true,
+          }
+        }).onOk(() => {
+          doDeleteBlock(index)
+        })
+      } else {
+        doDeleteBlock(index)
+      }
     }
 
     function deleteAllBlocks () {

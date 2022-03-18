@@ -16,6 +16,9 @@ export default defineComponent({
     defaultValue (config) {
       return undefined
     },
+    shouldConfirmDelete (config, value) {
+      return true
+    },
   },
   emits: withBlockEmits(),
   props: withBlockProps(),

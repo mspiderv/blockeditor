@@ -106,6 +106,9 @@ export default defineComponent({
         sections: [],
       }
     },
+    shouldConfirmDelete (config, value) {
+      return value.sections.length > 0
+    },
   },
   emits: withBlockEmits(),
   props: withBlockProps(),
