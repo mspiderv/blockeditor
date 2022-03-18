@@ -45,7 +45,13 @@
     @update="override()"
   >
     <template #item="{ element, index }">
-      <q-card class="item q-mx-sm q-mt-md q-mb-sm">
+      <q-card
+        class="item q-mx-sm q-mt-md q-mb-sm"
+        :class="[
+          sectionColor(element, index),
+          { 'invisible-section': (editorWithVisibility && !element.visible) }
+        ]"
+      >
         <editor-block-toolbar
           icon=""
           :title="`${index + 1}. section`"
@@ -59,6 +65,7 @@
           </template>
         </editor-block-toolbar>
         <editor
+          v-show="!editorWithVisibility || element.visible || !config.collapseInvisibleSections"
           style="margin-top: -15px;"
           flat
           class="q-px-sm"
@@ -89,6 +96,8 @@ export default defineComponent({
     icon: 'auto_awesome_mosaic',
     defaultConfig: {
       defaultDirection: 'row',
+      sectionColorStrength: 2,
+      collapseInvisibleSections: true,
     },
     defaultValue (config) {
       return {
@@ -136,6 +145,34 @@ export default defineComponent({
     // TODO
     const draggableGroupFlex = `blockeditor-group-flex`
 
+    /*
+     * Section colors
+     */
+    const sectionColors = [
+      'blue',
+      'green',
+      'red',
+      'amber',
+      'teal',
+      'deep-orange',
+      'indigo',
+      'cyan',
+      'light-blue',
+      'deep-purple',
+      'lime',
+      'pink',
+      'light-green',
+      'purple',
+      'yellow',
+      'brown',
+      'blue-grey',
+      'orange',
+    ]
+    function sectionColor (section, index) {
+      const colorIndex = index % sectionColors.length
+      return `bg-${sectionColors[colorIndex]}-${props.config.sectionColorStrength}`
+    }
+
     return {
       update,
       override,
@@ -143,6 +180,7 @@ export default defineComponent({
       addSection,
       itemKey,
       draggableGroupFlex,
+      sectionColor,
     }
   },
 })
@@ -155,4 +193,8 @@ export default defineComponent({
 //  background-color: rgba(0, 0, 0, 0.05)
 .item
   background-color: rgba(0, 0, 0, 0.05)
+
+.invisible-section
+  opacity: 0.5
+
 </style>
