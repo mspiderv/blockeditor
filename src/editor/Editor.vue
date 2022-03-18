@@ -43,8 +43,8 @@
                 :title="resolveBlockTitle(element.type)"
                 :with-visibility="withVisibility"
                 v-model:visible="element.visible"
-                @duplicate-block="duplicateBlock(element, index)"
-                @delete-block="deleteBlock(element, index)"
+                @duplicate="duplicateBlock(element, index)"
+                @delete="deleteBlock(element, index)"
               >
                 <template #prepend>
                   <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />

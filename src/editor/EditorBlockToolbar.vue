@@ -16,11 +16,11 @@
       >
         <q-tooltip>Block is {{ visible ? 'visible' : 'invisible' }}</q-tooltip>
       </q-toggle>
-      <q-btn flat round size="sm" icon="content_copy" @click="$emit('duplicateBlock')">
-        <q-tooltip>Duplicate block</q-tooltip>
+      <q-btn flat round size="sm" icon="content_copy" @click="$emit('duplicate')">
+        <q-tooltip>Duplicate</q-tooltip>
       </q-btn>
-      <q-btn flat round size="sm" icon="close" @click="$emit('deleteBlock')">
-        <q-tooltip>Delete block</q-tooltip>
+      <q-btn flat round size="sm" icon="close" @click="$emit('delete')">
+        <q-tooltip>Delete</q-tooltip>
       </q-btn>
       <slot name="append" />
     </div>
@@ -34,8 +34,8 @@ export default defineComponent({
   name: 'EditorBlockToolbarComponent',
   emits: [
     'update:visible',
-    'duplicateBlock',
-    'deleteBlock',
+    'duplicate',
+    'delete',
   ],
   props: {
     icon: {

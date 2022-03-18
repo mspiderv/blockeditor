@@ -55,10 +55,12 @@
         <editor-block-toolbar
           icon=""
           :title="`${index + 1}. ${modelValue.direction}`"
-          v-model:visible="element.visible"
           :with-copy="editorWithCopy"
           :with-paste="editorWithPaste"
           :with-visibility="editorWithVisibility"
+          v-model:visible="element.visible"
+          @duplicate="duplicateSection(element, index)"
+          @delete="deleteSection(element, index)"
         >
           <template #prepend>
             <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />
@@ -90,6 +92,7 @@ import Draggable from 'vuedraggable'
 import { defineComponent } from 'vue'
 import EditorBlockToolbar from '../EditorBlockToolbar'
 import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'FlexBlockComponent',
@@ -120,6 +123,8 @@ export default defineComponent({
     EditorBlockToolbar,
   },
   setup (props, ctx) {
+    const $q = useQuasar()
+
     const {
       update,
       override,
@@ -150,6 +155,44 @@ export default defineComponent({
 
     // TODO
     const draggableGroupFlex = `blockeditor-group-flex`
+
+    function duplicateSection (section, index) {
+      const sections = [...props.modelValue.sections]
+      sections.splice(index, 0, cloneSection(section))
+      override({ sections })
+    }
+
+    function cloneSection (section) {
+      return JSON.parse(JSON.stringify(section))
+    }
+
+    function doDeleteSection (index) {
+      override({
+        sections: props.modelValue.sections.filter((section, indexToDelete) => index !== indexToDelete)
+      })
+    }
+
+    function deleteSection (section, index) {
+      if (section.data.length > 0) {
+        $q.dialog({
+          title: 'Delete section ?',
+          message: 'Do you really want to delete this section ?',
+          cancel: {
+            color: 'grey-7',
+            flat: true,
+          },
+          ok: {
+            label: 'Delete',
+            color: 'negative',
+            flat: true,
+          }
+        }).onOk(() => {
+          doDeleteSection(index)
+        })
+      } else {
+        doDeleteSection(index)
+      }
+    }
 
     /*
      * Section colors
@@ -187,6 +230,8 @@ export default defineComponent({
       itemKey,
       draggableGroupFlex,
       sectionColor,
+      duplicateSection,
+      deleteSection,
     }
   },
 })
