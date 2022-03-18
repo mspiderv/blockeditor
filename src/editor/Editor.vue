@@ -203,7 +203,10 @@ export default defineComponent({
           if (!content.startsWith(clipboardPrefix)) throw new Error()
           const parsed = JSON.parse(content.substr(clipboardPrefix.length))
           if (!Array.isArray(parsed)) throw new Error()
-          update(parsed)
+          update([
+            ...props.modelValue,
+            ...parsed,
+          ])
         } catch (e) {
           $q.notify({
             color: 'negative',
