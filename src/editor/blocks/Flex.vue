@@ -72,15 +72,15 @@ export default defineComponent({
     name: 'flex',
     title: 'Flex Layout',
     icon: 'auto_awesome_mosaic',
+    defaultConfig: {
+      defaultDirection: 'row',
+    },
     defaultValue (config) {
       return {
         direction: config.defaultDirection,
         items: [],
       }
     },
-    defaultConfig: {
-      defaultDirection: 'row',
-    }
   },
   emits: withBlockEmits(),
   props: withBlockProps(),

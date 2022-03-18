@@ -20,7 +20,12 @@ export default defineComponent({
     name: 'wysiwyg',
     title: 'Rich Text',
     icon: 'wysiwyg',
-    defaultValue: '',
+    defaultConfig: {
+      //
+    },
+    defaultValue (config) {
+      return ''
+    },
   },
   emits: withBlockEmits(),
   props: withBlockProps(),

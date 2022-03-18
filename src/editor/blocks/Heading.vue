@@ -39,6 +39,13 @@ export default defineComponent({
     name: 'heading',
     title: 'Heading',
     icon: 'text_fields',
+    defaultConfig: {
+      ...alignDefaultConfig,
+      levels: true,
+      defaultLevel: 1,
+      maxLevel: 6,
+      placeholder: 'Type here...',
+    },
     defaultValue (config) {
       return {
         ...alignDefaultValue(config),
@@ -46,13 +53,6 @@ export default defineComponent({
         text: '',
       }
     },
-    defaultConfig: {
-      ...alignDefaultConfig,
-      levels: true,
-      defaultLevel: 1,
-      maxLevel: 6,
-      placeholder: 'Type here...',
-    }
   },
   emits: withBlockEmits(),
   props: withBlockProps(),

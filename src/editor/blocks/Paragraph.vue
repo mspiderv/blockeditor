@@ -27,16 +27,16 @@ export default defineComponent({
     name: 'paragraph',
     title: 'Paragraph',
     icon: 'subject',
+    defaultConfig: {
+      ...alignDefaultConfig,
+      placeholder: 'Type here...',
+    },
     defaultValue (config) {
       return {
         ...alignDefaultValue(config),
         text: '',
       }
     },
-    defaultConfig: {
-      ...alignDefaultConfig,
-      placeholder: 'Type here...',
-    }
   },
   emits: withBlockEmits(),
   props: withBlockProps(),

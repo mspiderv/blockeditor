@@ -10,6 +10,12 @@ export default defineComponent({
     name: 'delimiter',
     title: 'Delimiter',
     icon: 'horizontal_rule',
+    defaultConfig: {
+      //
+    },
+    defaultValue (config) {
+      return undefined
+    },
   },
   emits: withBlockEmits(),
   props: withBlockProps(),

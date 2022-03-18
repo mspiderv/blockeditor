@@ -27,6 +27,7 @@ import { json } from '@codemirror/lang-json'
 import { xml } from '@codemirror/lang-xml'
 import { javascript } from '@codemirror/lang-javascript'
 import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
+import { alignDefaultConfig, alignDefaultValue } from 'src/editor/blocks/actions/Align'
 
 const langs = {
   html,
@@ -42,7 +43,12 @@ export default defineComponent({
     name: 'html',
     title: 'HTML',
     icon: 'code',
-    defaultValue: '',
+    defaultConfig: {
+      //
+    },
+    defaultValue (config) {
+      return ''
+    },
   },
   emits: withBlockEmits(),
   props: {
