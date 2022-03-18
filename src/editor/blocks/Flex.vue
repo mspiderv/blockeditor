@@ -88,11 +88,11 @@
 
 <script>
 import Editor from '../Editor'
+import { useQuasar } from 'quasar'
 import Draggable from 'vuedraggable'
 import { defineComponent } from 'vue'
 import EditorBlockToolbar from '../EditorBlockToolbar'
 import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
-import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'FlexBlockComponent',
