@@ -85,8 +85,6 @@
 // TODO: [AccordionBlock]
 // TODO: [AlertBlock]
 // TODO: [ButtonBlock]
-// TODO: ked mam napr. prazdny Paragraf a chcem ho zmazat tak to vyhodi confirm, ale pre prazdny paragraf je ten confirm nepodstatny
-        // Toto vyriesit tak ze na kazdom bloku bude implementovana nejaka funkcia napr. ze "needsConfirmDelete(): bool"
 
 import copy from 'clipboard-copy'
 import Draggable from 'vuedraggable'
