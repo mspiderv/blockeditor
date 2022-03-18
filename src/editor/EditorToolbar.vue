@@ -52,6 +52,12 @@ import { defineComponent} from 'vue'
 
 export default defineComponent({
   name: 'EditorToolbarComponent',
+  emits: [
+    'createBlock',
+    'copyAllBlocks',
+    'pasteContent',
+    'deleteAllBlocks',
+  ],
   props: {
     blocks: {
       type: Array,
@@ -70,11 +76,5 @@ export default defineComponent({
       required: true,
     }
   },
-  emits: [
-    'createBlock',
-    'copyAllBlocks',
-    'pasteContent',
-    'deleteAllBlocks',
-  ],
 })
 </script>
