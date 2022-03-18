@@ -5,7 +5,7 @@
   >
     <template v-slot:control>
       <q-card
-        class="full-width"
+        class="full-width q-mt-sm"
         :flat="flat"
       >
         <editor-toolbar
