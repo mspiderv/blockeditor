@@ -31,34 +31,19 @@
 <script>
 import { defineComponent } from 'vue'
 import Align, { alignDefaultConfig, alignDefaultValue } from './actions/Align'
+import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
 
 export default defineComponent({
   name: 'HeadingBlockComponent',
-  emits: ['update:modelValue'],
+  emits: withBlockEmits(),
+  props: withBlockProps(),
   components: {
     Align,
   },
-  props: {
-    draggableGroup: {
-      type: String,
-      required: true,
-    },
-    actionsRef: {
-      type: HTMLElement,
-      required: true,
-    },
-    modelValue: {
-      required: true,
-    },
-    config: {
-      type: Object,
-      required: true,
-    },
-  },
   setup (props, ctx) {
-    function update (value) {
-      ctx.emit('update:modelValue', value)
-    }
+    const {
+      update,
+    } = useBlock(props, ctx)
 
     function updateText (text) {
       update({

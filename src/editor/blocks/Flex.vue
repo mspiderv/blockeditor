@@ -64,36 +64,21 @@ import Editor from '../Editor'
 import Draggable from 'vuedraggable'
 import { Delimiter, Heading, HTML, Paragraph, Wysiwyg, } from './'
 import EditorBlockToolbar from '../EditorBlockToolbar'
+import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
 
 export default defineComponent({
   name: 'FlexBlockComponent',
-  emits: ['update:modelValue'],
+  emits: withBlockEmits(),
+  props: withBlockProps(),
   components: {
     EditorBlockToolbar,
     Editor,
     Draggable,
   },
-  props: {
-    draggableGroup: {
-      type: String,
-      required: true,
-    },
-    actionsRef: {
-      type: HTMLElement,
-      required: true,
-    },
-    modelValue: {
-      required: true,
-    },
-    config: {
-      type: Object,
-      required: true,
-    },
-  },
   setup (props, ctx) {
-    function update (value) {
-      ctx.emit('update:modelValue', value)
-    }
+    const {
+      update,
+    } = useBlock(props, ctx)
 
     function override (data = {}) {
       update({

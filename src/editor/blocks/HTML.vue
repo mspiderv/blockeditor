@@ -26,6 +26,7 @@ import { css } from '@codemirror/lang-css'
 import { json } from '@codemirror/lang-json'
 import { xml } from '@codemirror/lang-xml'
 import { javascript } from '@codemirror/lang-javascript'
+import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
 
 const langs = {
   html,
@@ -37,23 +38,9 @@ const langs = {
 
 export default defineComponent({
   name: 'HtmlBlockComponent',
-  emits: ['update:modelValue'],
+  emits: withBlockEmits(),
   props: {
-    draggableGroup: {
-      type: String,
-      required: true,
-    },
-    actionsRef: {
-      type: HTMLElement,
-      required: true,
-    },
-    modelValue: {
-      required: true,
-    },
-    config: {
-      type: Object,
-      required: true,
-    },
+    ...withBlockProps(),
     // TODO: toto presunut do configu
     lang: {
       type: String,
@@ -61,11 +48,15 @@ export default defineComponent({
     }
   },
   setup (props, ctx) {
+    const {
+      update,
+    } = useBlock(props, ctx)
+
     const editor = ref(null)
 
     onMounted(() => {
       const updateModelValue = EditorView.updateListener.of(({ state }) => {
-        ctx.emit('update:modelValue', state.toJSON().doc)
+        update(state.toJSON().doc)
       })
 
       const startState = EditorState.create({

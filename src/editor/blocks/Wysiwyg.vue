@@ -5,36 +5,25 @@
     class="cursor-text"
     :fonts="fonts"
     :toolbar="toolbar"
-    @update:model-value="$emit('update:modelValue', $event)"
+    @update:model-value="update"
   />
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
+import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
 
 export default defineComponent({
   name: 'WysiwygBlockComponent',
-  emits: ['update:modelValue'],
-  props: {
-    draggableGroup: {
-      type: String,
-      required: true,
-    },
-    actionsRef: {
-      type: HTMLElement,
-      required: true,
-    },
-    modelValue: {
-      required: true,
-    },
-    config: {
-      type: Object,
-      required: true,
-    },
-  },
+  emits: withBlockEmits(),
+  props: withBlockProps(),
   setup (props, ctx) {
     const $q = useQuasar()
+
+    const {
+      update,
+    } = useBlock(props, ctx)
 
     const toolbar = [
       [
@@ -114,6 +103,7 @@ export default defineComponent({
     }
 
     return {
+      update,
       toolbar,
       fonts,
     }

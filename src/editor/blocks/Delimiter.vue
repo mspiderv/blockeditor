@@ -2,26 +2,12 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { withBlockEmits, withBlockProps } from 'src/editor/composables/block'
 
 export default defineComponent({
   name: 'DelimiterBlockComponent',
-  props: {
-    draggableGroup: {
-      type: String,
-      required: true,
-    },
-    actionsRef: {
-      type: HTMLElement,
-      required: true,
-    },
-    modelValue: {
-      required: true,
-    },
-    config: {
-      type: Object,
-      required: true,
-    },
-  },
+  emits: withBlockEmits(),
+  props: withBlockProps(),
   blockDefinition: {
     name: 'delimiter',
     title: 'Delimiter',
