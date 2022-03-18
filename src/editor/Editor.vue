@@ -93,6 +93,7 @@ export default defineComponent({
   name: 'BlockEditorComponent',
   emits: [
     'update:modelValue',
+    // TODO: copy & paste ?
   ],
   components: {
     Draggable,
