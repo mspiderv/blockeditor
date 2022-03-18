@@ -1,8 +1,10 @@
 <template>
   <q-page padding>
+    <q-toggle v-model="showSource" label="Show source" />
     <div class="row q-gutter-x-lg">
       <editor
         class="col"
+        color="white"
         :blocks="blocks"
         v-model="value"
         label="My first editor"
@@ -11,7 +13,7 @@
         with-paste
         with-visibility
       />
-      <q-card dark class="col q-mt-lg">
+      <q-card dark class="col q-mt-lg" v-show="showSource">
         <q-card-section>
           <pre>value: {{ value }}</pre>
         </q-card-section>
@@ -129,6 +131,7 @@ export default defineComponent({
       value,
       value2,
       blocks,
+      showSource: ref(false),
     }
   }
 })
