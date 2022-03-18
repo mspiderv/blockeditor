@@ -7,12 +7,12 @@
     </div>
     <div>
       <q-toggle
+        v-if="withVisibility"
         :model-value="visible"
         @update:model-value="$emit('update:visible', $event)"
         checked-icon="visibility"
         unchecked-icon="visibility_off"
-        color="grey-8"
-        v-if="withVisibility"
+        :color="visible ? 'positive' : 'grey-8'"
       >
         <q-tooltip>Block is {{ visible ? 'visible' : 'invisible' }}</q-tooltip>
       </q-toggle>
