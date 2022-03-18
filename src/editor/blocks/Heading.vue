@@ -19,7 +19,7 @@
       :color="modelValue.level === level ? 'black' : 'grey'"
       @click="updateLevel(level)"
     />
-    <q-separator vertical color="grey-4" class="q-mx-xs" inset="" v-if="config.align" />
+    <q-separator vertical color="grey-4" class="q-mx-xs" inset v-if="config.align" />
     <align
       :config="config"
       :model-value="modelValue"
@@ -33,18 +33,22 @@ import { defineComponent } from 'vue'
 import Align, { alignDefaultConfig, alignDefaultValue } from './actions/Align'
 
 export default defineComponent({
-  name: 'HeadingComponent',
+  name: 'HeadingBlockComponent',
   emits: ['update:modelValue'],
   components: {
     Align,
   },
   props: {
+    draggableGroup: {
+      type: String,
+      required: true,
+    },
     actionsRef: {
       type: HTMLElement,
       required: true,
     },
     modelValue: {
-      type: Object,
+      required: true,
     },
     config: {
       type: Object,

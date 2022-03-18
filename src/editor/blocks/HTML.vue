@@ -36,12 +36,25 @@ const langs = {
 }
 
 export default defineComponent({
-  name: 'HTMLComponent',
+  name: 'HtmlBlockComponent',
   emits: ['update:modelValue'],
   props: {
-    modelValue: {
+    draggableGroup: {
       type: String,
+      required: true,
     },
+    actionsRef: {
+      type: HTMLElement,
+      required: true,
+    },
+    modelValue: {
+      required: true,
+    },
+    config: {
+      type: Object,
+      required: true,
+    },
+    // TODO: toto presunut do configu
     lang: {
       type: String,
       default: 'html'

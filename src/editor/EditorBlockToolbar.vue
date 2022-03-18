@@ -57,3 +57,10 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="sass" scoped>
+.block-toolbar
+  background-color: rgba(0, 0, 0, 0.05)
+
+//.block-toolbar
+//  border-top: 1px solid rgba(0, 0, 0, 0.05)
+</style>

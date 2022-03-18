@@ -14,11 +14,23 @@ import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 
 export default defineComponent({
-  name: 'WysiwygComponent',
+  name: 'WysiwygBlockComponent',
   emits: ['update:modelValue'],
   props: {
-    modelValue: {
+    draggableGroup: {
       type: String,
+      required: true,
+    },
+    actionsRef: {
+      type: HTMLElement,
+      required: true,
+    },
+    modelValue: {
+      required: true,
+    },
+    config: {
+      type: Object,
+      required: true,
     },
   },
   setup (props, ctx) {

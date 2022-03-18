@@ -1,6 +1,7 @@
 <template>
   <q-toolbar class="q-px-sm justify-between">
     <div>
+      <slot name="prepend" />
       <q-btn
         flat
         round
@@ -41,6 +42,7 @@
       >
         <q-tooltip>Delete all blocks</q-tooltip>
       </q-btn>
+      <slot name="append" />
     </div>
   </q-toolbar>
 </template>

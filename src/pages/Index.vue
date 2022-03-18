@@ -40,7 +40,7 @@
 <script>
 import Editor from 'src/editor/Editor'
 import { defineComponent, ref } from 'vue'
-import { Delimiter, Heading, HTML, Paragraph, Wysiwyg } from 'src/editor/blocks'
+import { Delimiter, Heading, HTML, Paragraph, Wysiwyg, Flex } from 'src/editor/blocks'
 
 export default defineComponent({
   name: 'PageIndex',
@@ -48,57 +48,59 @@ export default defineComponent({
     Editor,
   },
   setup () {
-    // const value = ref([
-    //   {
-    //     "type": "Heading",
-    //     "visible": true,
-    //     "data": {
-    //       "level": 1,
-    //       "text": "Čarovná galéria"
-    //     }
-    //   },
-    //   {
-    //     "type": "Heading",
-    //     "visible": true,
-    //     "data": {
-    //       "level": 2,
-    //       "text": "Prečo si vybrať nás ?"
-    //     }
-    //   },
-    //   {
-    //     "type": "Wysiwyg",
-    //     "visible": true,
-    //     "data": "A teraz rich text"
-    //   },
-    //   {
-    //     "type": "Paragraph",
-    //     "visible": true,
-    //     "data": "Toto je nejaký super text\n\nAko sa máš ?"
-    //   },
-    //   {
-    //     "type": "HTML",
-    //     "visible": true,
-    //     "data": "kus html kódu"
-    //   },
-    //   {
-    //     "type": "Delimiter",
-    //     "visible": true
-    //   },
-    //   {
-    //     "type": "Heading",
-    //     "visible": true,
-    //     "data": {
-    //       "level": 2,
-    //       "text": "Nejaký ďalší nadpis"
-    //     }
-    //   },
-    //   {
-    //     "type": "Paragraph",
-    //     "visible": true,
-    //     "data": "A ďalší text"
-    //   }
-    // ])
-    const value = ref([])
+    const value = ref([
+      {
+        "type": "heading",
+        "visible": true,
+        "data": {
+          "align": "center",
+          "level": 1,
+          "text": "Vitajte na našom webe !"
+        }
+      },
+      {
+        "type": "flex",
+        "visible": true,
+        "data": {
+          "direction": "column",
+          "items": [
+            {
+              "data": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "align": "left",
+                    "level": 1,
+                    "text": "Toto je náš obrázokk"
+                  },
+                  "visible": true
+                },
+                {
+                  "type": "paragraph",
+                  "data": {
+                    "align": "left",
+                    "text": "Na obrázku sú nejaké veci"
+                  },
+                  "visible": true
+                }
+              ],
+              "visible": true
+            },
+            {
+              "data": [
+                {
+                  "type": "html",
+                  "data": "<img src=\"\" />",
+                  "visible": true
+                }
+              ],
+              "visible": true
+            }
+          ]
+        }
+      }
+    ])
+    // const value = ref([])
     const value2 = ref([])
 
     const blocks = [
@@ -118,6 +120,7 @@ export default defineComponent({
       { component: Wysiwyg },
       { component: Delimiter },
       { component: HTML },
+      { component: Flex },
     ]
 
     return {

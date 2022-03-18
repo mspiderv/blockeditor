@@ -4,7 +4,10 @@
     borderless
   >
     <template v-slot:control>
-      <q-card class="full-width q-mt-sm">
+      <q-card
+        class="full-width"
+        :flat="flat"
+      >
         <editor-toolbar
           :blocks="blocksForToolbar"
           :model-value="modelValue"
@@ -14,7 +17,14 @@
           @copy-all-blocks="copyAllBlocks"
           @paste-content="pasteContent"
           @delete-all-blocks="deleteAllBlocks"
-        />
+        >
+          <template #prepend>
+            <slot name="toolbar-prepend" />
+          </template>
+          <template #append>
+            <slot name="toolbar-append" />
+          </template>
+        </editor-toolbar>
         <draggable
           :group="draggableGroup"
           :list="modelValue"
@@ -24,7 +34,7 @@
           @update="update(modelValue)"
         >
           <template #item="{ element, index }">
-            <div :class="{ 'invisible-block': withVisibility && !element.visible }">
+            <div class="block" :class="{ 'invisible-block': withVisibility && !element.visible }">
               <editor-block-toolbar
                 :icon="resolveBlockIcon(element.type)"
                 :title="resolveBlockTitle(element.type)"
@@ -49,6 +59,7 @@
                 v-model="element.data"
                 :actions-ref="actionRefs[index]"
                 :config="getConfigForBlock(element.type)"
+                :draggable-group="draggableGroup"
               />
             </div>
           </template>
@@ -102,6 +113,10 @@ export default defineComponent({
       default () {
         return `blockeditor-group-${nextEditorId++}`
       },
+    },
+    flat: {
+      type: Boolean,
+      default: false
     },
     withCopy: {
       type: Boolean,
@@ -308,9 +323,9 @@ export default defineComponent({
 </script>
 
 <style lang="sass" scoped>
-.block-toolbar
-  background-color: rgba(0, 0, 0, 0.05)
-
 .invisible-block
   opacity: 0.5
+
+//.block:nth-child(2n+1)
+//  background-color: rgba(0, 0, 0, 0.05)
 </style>
