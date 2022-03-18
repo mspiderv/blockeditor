@@ -1,8 +1,44 @@
 <template>
+
+  <!-- Toolbar Actions -->
+  <teleport :to="actionsRef">
+    <q-btn
+      flat
+      round
+      dense
+      icon="view_stream"
+      :color="modelValue.direction === 'row' ? 'black' : 'grey'"
+      @click="updateDirection('row')"
+    >
+      <q-tooltip>Row layout</q-tooltip>
+    </q-btn>
+    <q-btn
+      flat
+      round
+      dense
+      icon="view_column"
+      :color="modelValue.direction === 'column' ? 'black' : 'grey'"
+      @click="updateDirection('column')"
+    >
+      <q-tooltip>Column layout</q-tooltip>
+    </q-btn>
+    <q-separator vertical color="grey-4" class="q-mx-xs" inset />
+    <q-btn
+      flat
+      round
+      dense
+      icon="add"
+      @click="addSection"
+    >
+      <q-tooltip>Add layout section</q-tooltip>
+    </q-btn>
+  </teleport>
+
+  <!-- Block Content -->
   <draggable
-    :class="{ 'q-pb-sm': modelValue.items.length }"
+    :class="{ 'q-pb-sm': modelValue.sections.length }"
     :group="draggableGroupFlex"
-    :list="modelValue.items"
+    :list="modelValue.sections"
     handle=".draggable-handle"
     :item-key="itemKey"
     ghost-class="bg-grey-6"
@@ -12,57 +48,34 @@
       <q-card class="item q-mx-md q-my-lg" flat>
         <editor-block-toolbar
           icon=""
-          :title="`${index + 1}. item`"
-          with-visibility
+          :title="`${index + 1}. section`"
           v-model:visible="element.visible"
+          :with-copy="editorWithCopy"
+          :with-paste="editorWithPaste"
+          :with-visibility="editorWithVisibility"
         >
           <template #prepend>
             <q-icon size="sm" name="drag_indicator" class="q-ml-xs cursor-pointer draggable-handle" />
           </template>
         </editor-block-toolbar>
         <editor
-          flat
-          with-visibility
-          :draggable-group="draggableGroup"
-          :blocks="blocks"
           v-model="element.data"
+          :blocks="editorBlocks"
+          :draggable-group="editorDraggableGroup"
+          flat
+          :with-copy="editorWithCopy"
+          :with-paste="editorWithPaste"
+          :with-visibility="editorWithVisibility"
         />
       </q-card>
     </template>
   </draggable>
-  <teleport :to="actionsRef">
-    <q-btn
-      flat
-      round
-      dense
-      icon="view_stream"
-      :color="modelValue.direction === 'row' ? 'black' : 'grey'"
-      @click="updateDirection('row')"
-    />
-    <q-btn
-      flat
-      round
-      dense
-      icon="view_column"
-      :color="modelValue.direction === 'column' ? 'black' : 'grey'"
-      @click="updateDirection('column')"
-    />
-    <q-separator vertical color="grey-4" class="q-mx-xs" inset />
-    <q-btn
-      flat
-      round
-      dense
-      icon="add"
-      @click="addItem"
-    />
-  </teleport>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
 import Editor from '../Editor'
 import Draggable from 'vuedraggable'
-import { Delimiter, Heading, HTML, Paragraph, Wysiwyg, } from './'
+import { defineComponent } from 'vue'
 import EditorBlockToolbar from '../EditorBlockToolbar'
 import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables/block'
 
@@ -78,37 +91,31 @@ export default defineComponent({
     defaultValue (config) {
       return {
         direction: config.defaultDirection,
-        items: [],
+        sections: [],
       }
     },
   },
   emits: withBlockEmits(),
   props: withBlockProps(),
   components: {
-    EditorBlockToolbar,
     Editor,
     Draggable,
+    EditorBlockToolbar,
   },
   setup (props, ctx) {
     const {
       update,
+      override,
     } = useBlock(props, ctx)
-
-    function override (data = {}) {
-      update({
-        ...props.modelValue,
-        ...data,
-      })
-    }
 
     function updateDirection (direction) {
       override({ direction })
     }
 
-    function addItem () {
+    function addSection () {
       override({
-        items: [
-          ...props.modelValue.items,
+        sections: [
+          ...props.modelValue.sections,
           {
             data: [],
             visible: true,
@@ -117,31 +124,11 @@ export default defineComponent({
       })
     }
 
-    const blocks = [
-      {
-        name: 'myCustomHeading',
-        title: 'My Custom Heading',
-        icon: 'face',
-        component: Heading,
-        config: {
-          align: false,
-          maxLevel: 3,
-          placeholder: 'custom placeholder',
-        }
-      },
-      { component: Heading },
-      { component: Paragraph },
-      { component: Wysiwyg },
-      { component: Delimiter },
-      { component: HTML },
-      // { component: Flex },
-    ]
-
     /*
      * Draggable
      */
     function itemKey (block) {
-      return props.modelValue.items.indexOf(block)
+      return props.modelValue.sections.indexOf(block)
     }
 
     // TODO
@@ -151,8 +138,7 @@ export default defineComponent({
       update,
       override,
       updateDirection,
-      addItem,
-      blocks,
+      addSection,
       itemKey,
       draggableGroupFlex,
     }

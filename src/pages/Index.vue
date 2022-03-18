@@ -2,14 +2,14 @@
   <q-page padding>
     <div class="row q-gutter-x-lg">
       <editor
-        :blocks="blocks"
         class="col"
+        :blocks="blocks"
+        v-model="value"
+        label="My first editor"
         draggable-group="my-group"
-        with-visibility
         with-copy
         with-paste
-        label="My first editor"
-        v-model="value"
+        with-visibility
       />
       <q-card dark class="col q-mt-lg">
         <q-card-section>
@@ -17,23 +17,23 @@
         </q-card-section>
       </q-card>
     </div>
-    <div class="row q-gutter-x-lg">
-      <editor
-        :blocks="blocks"
-        class="col"
-        draggable-group="my-group"
-        with-visibility
-        with-copy
-        with-paste
-        label="My second editor"
-        v-model="value2"
-      />
-      <q-card dark class="col q-mt-lg">
-        <q-card-section>
-          <pre>value: {{ value2 }}</pre>
-        </q-card-section>
-      </q-card>
-    </div>
+<!--    <div class="row q-gutter-x-lg">-->
+<!--      <editor-->
+<!--        :blocks="blocks"-->
+<!--        class="col"-->
+<!--        draggable-group="my-group"-->
+<!--        with-visibility-->
+<!--        with-copy-->
+<!--        with-paste-->
+<!--        label="My second editor"-->
+<!--        v-model="value2"-->
+<!--      />-->
+<!--      <q-card dark class="col q-mt-lg">-->
+<!--        <q-card-section>-->
+<!--          <pre>value: {{ value2 }}</pre>-->
+<!--        </q-card-section>-->
+<!--      </q-card>-->
+<!--    </div>-->
   </q-page>
 </template>
 
@@ -63,7 +63,7 @@ export default defineComponent({
         "visible": true,
         "data": {
           "direction": "column",
-          "items": [
+          "sections": [
             {
               "data": [
                 {
@@ -102,6 +102,8 @@ export default defineComponent({
     ])
     // const value = ref([])
     const value2 = ref([])
+
+    value.value = []
 
     const blocks = [
       {

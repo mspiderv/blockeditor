@@ -56,10 +56,17 @@
               <component
                 v-if="actionRefs[index]"
                 :is="getBlockByName(element.type).component"
+
                 v-model="element.data"
-                :actions-ref="actionRefs[index]"
                 :config="getConfigForBlock(element.type)"
-                :draggable-group="draggableGroup"
+                :actions-ref="actionRefs[index]"
+
+                :editor-blocks="blocks"
+                :editor-draggable-group="draggableGroup"
+                :editor-flat="flat"
+                :editor-with-copy="withCopy"
+                :editor-with-paste="withPaste"
+                :editor-with-visibility="withVisibility"
               />
             </div>
           </template>
@@ -86,51 +93,21 @@ import EditorToolbar from './EditorToolbar'
 import EditorBlockToolbar from './EditorBlockToolbar'
 
 import copy from 'clipboard-copy'
-let nextEditorId = 1
+import { withEditorProps } from 'src/editor/composables/block'
 const clipboardPrefix = 'block-editor-content:'
 
 export default defineComponent({
   name: 'BlockEditorComponent',
+  // TODO: extrahovat do withEditorEmits()
   emits: [
     'update:modelValue',
     // TODO: copy & paste ?
   ],
+  props: withEditorProps(),
   components: {
     Draggable,
     EditorToolbar,
     EditorBlockToolbar,
-  },
-  props: {
-    blocks: {
-      type: Array,
-      required: true,
-    },
-    modelValue: {
-      type: Array,
-      required: true,
-    },
-    draggableGroup: {
-      type: String,
-      default () {
-        return `blockeditor-group-${nextEditorId++}`
-      },
-    },
-    flat: {
-      type: Boolean,
-      default: false
-    },
-    withCopy: {
-      type: Boolean,
-      default: false
-    },
-    withPaste: {
-      type: Boolean,
-      default: false
-    },
-    withVisibility: {
-      type: Boolean,
-      default: false
-    }
   },
   setup (props, ctx) {
     const $q = useQuasar()
