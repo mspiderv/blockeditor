@@ -35,6 +35,25 @@ import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables
 
 export default defineComponent({
   name: 'HeadingBlockComponent',
+  blockDefinition: {
+    name: 'heading',
+    title: 'Heading',
+    icon: 'text_fields',
+    defaultValue (config) {
+      return {
+        ...alignDefaultValue(config),
+        ...(config.levels ? { level: config.defaultLevel } : {}),
+        text: '',
+      }
+    },
+    defaultConfig: {
+      ...alignDefaultConfig,
+      levels: true,
+      defaultLevel: 1,
+      maxLevel: 6,
+      placeholder: 'Type here...',
+    }
+  },
   emits: withBlockEmits(),
   props: withBlockProps(),
   components: {
@@ -63,25 +82,6 @@ export default defineComponent({
       update,
       updateText,
       updateLevel,
-    }
-  },
-  blockDefinition: {
-    name: 'heading',
-    title: 'Heading',
-    icon: 'text_fields',
-    defaultValue (config) {
-      return {
-        ...alignDefaultValue(config),
-        ...(config.levels ? { level: config.defaultLevel } : {}),
-        text: '',
-      }
-    },
-    defaultConfig: {
-      ...alignDefaultConfig,
-      levels: true,
-      defaultLevel: 1,
-      maxLevel: 6,
-      placeholder: 'Type here...',
     }
   },
 })

@@ -16,6 +16,12 @@ import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables
 
 export default defineComponent({
   name: 'WysiwygBlockComponent',
+  blockDefinition: {
+    name: 'wysiwyg',
+    title: 'Rich Text',
+    icon: 'wysiwyg',
+    defaultValue: '',
+  },
   emits: withBlockEmits(),
   props: withBlockProps(),
   setup (props, ctx) {
@@ -108,12 +114,6 @@ export default defineComponent({
       fonts,
     }
   },
-  blockDefinition: {
-    name: 'wysiwyg',
-    title: 'Rich Text',
-    icon: 'wysiwyg',
-    defaultValue: '',
-  }
 })
 </script>
 

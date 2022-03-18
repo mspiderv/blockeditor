@@ -38,6 +38,12 @@ const langs = {
 
 export default defineComponent({
   name: 'HtmlBlockComponent',
+  blockDefinition: {
+    name: 'html',
+    title: 'HTML',
+    icon: 'code',
+    defaultValue: '',
+  },
   emits: withBlockEmits(),
   props: {
     ...withBlockProps(),
@@ -80,12 +86,6 @@ export default defineComponent({
       editor,
     }
   },
-  blockDefinition: {
-    name: 'html',
-    title: 'HTML',
-    icon: 'code',
-    defaultValue: '',
-  }
 })
 </script>
 

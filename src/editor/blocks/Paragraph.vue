@@ -23,6 +23,21 @@ import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables
 
 export default defineComponent({
   name: 'ParagraphBlockComponent',
+  blockDefinition: {
+    name: 'paragraph',
+    title: 'Paragraph',
+    icon: 'subject',
+    defaultValue (config) {
+      return {
+        ...alignDefaultValue(config),
+        text: '',
+      }
+    },
+    defaultConfig: {
+      ...alignDefaultConfig,
+      placeholder: 'Type here...',
+    }
+  },
   emits: withBlockEmits(),
   props: withBlockProps(),
   components: {
@@ -45,21 +60,6 @@ export default defineComponent({
       updateText,
     }
   },
-  blockDefinition: {
-    name: 'paragraph',
-    title: 'Paragraph',
-    icon: 'subject',
-    defaultValue (config) {
-      return {
-        ...alignDefaultValue(config),
-        text: '',
-      }
-    },
-    defaultConfig: {
-      ...alignDefaultConfig,
-      placeholder: 'Type here...',
-    }
-  }
 })
 </script>
 

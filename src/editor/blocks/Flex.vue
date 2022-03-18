@@ -68,6 +68,20 @@ import { useBlock, withBlockEmits, withBlockProps } from 'src/editor/composables
 
 export default defineComponent({
   name: 'FlexBlockComponent',
+  blockDefinition: {
+    name: 'flex',
+    title: 'Flex Layout',
+    icon: 'auto_awesome_mosaic',
+    defaultValue (config) {
+      return {
+        direction: config.defaultDirection,
+        items: [],
+      }
+    },
+    defaultConfig: {
+      defaultDirection: 'row',
+    }
+  },
   emits: withBlockEmits(),
   props: withBlockProps(),
   components: {
@@ -141,20 +155,6 @@ export default defineComponent({
       blocks,
       itemKey,
       draggableGroupFlex,
-    }
-  },
-  blockDefinition: {
-    name: 'flex',
-    title: 'Flex Layout',
-    icon: 'auto_awesome_mosaic',
-    defaultValue (config) {
-      return {
-        direction: config.defaultDirection,
-        items: [],
-      }
-    },
-    defaultConfig: {
-      defaultDirection: 'row',
     }
   },
 })
