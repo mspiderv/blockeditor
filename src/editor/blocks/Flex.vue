@@ -37,7 +37,7 @@
   <!-- Block Content -->
   <draggable
     :class="{ 'q-pb-sm': modelValue.sections.length }"
-    :group="draggableGroupFlex"
+    :group="`${editorDraggableGroup}-flex-draggable-group`"
     :list="modelValue.sections"
     handle=".draggable-handle"
     :item-key="itemKey"
@@ -153,9 +153,6 @@ export default defineComponent({
       return props.modelValue.sections.indexOf(block)
     }
 
-    // TODO
-    const draggableGroupFlex = `blockeditor-group-flex`
-
     function duplicateSection (section, index) {
       const sections = [...props.modelValue.sections]
       sections.splice(index, 0, cloneSection(section))
@@ -228,7 +225,6 @@ export default defineComponent({
       updateDirection,
       addSection,
       itemKey,
-      draggableGroupFlex,
       sectionColor,
       duplicateSection,
       deleteSection,
