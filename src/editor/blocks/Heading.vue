@@ -1,12 +1,4 @@
 <template>
-  <q-input
-    class="q-px-md custom-height"
-    borderless
-    autogrow
-    :placeholder="config.placeholder"
-    :model-value="modelValue.text"
-    @update:model-value="updateText"
-  />
   <teleport :to="actionsRef">
     <q-btn
       v-if="config.levels"
@@ -26,6 +18,14 @@
       @update:modelValue="update"
     />
   </teleport>
+  <q-input
+    class="q-px-md custom-height"
+    borderless
+    autogrow
+    :placeholder="config.placeholder"
+    :model-value="modelValue.text"
+    @update:model-value="updateText"
+  />
 </template>
 
 <script>

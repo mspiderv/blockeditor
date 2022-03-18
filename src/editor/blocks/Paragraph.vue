@@ -1,4 +1,11 @@
 <template>
+  <teleport :to="actionsRef">
+    <align
+      :config="config"
+      :model-value="modelValue"
+      @update:modelValue="update"
+    />
+  </teleport>
   <q-input
     class="q-px-md custom-height"
     borderless
@@ -7,13 +14,6 @@
     :model-value="modelValue.text"
     @update:model-value="updateText"
   />
-  <teleport :to="actionsRef">
-    <align
-      :config="config"
-      :model-value="modelValue"
-      @update:modelValue="update"
-    />
-  </teleport>
 </template>
 
 <script>
