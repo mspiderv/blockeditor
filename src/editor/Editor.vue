@@ -5,7 +5,8 @@
   >
     <template v-slot:control>
       <q-card
-        class="full-width q-mt-sm"
+        class="full-width"
+        :class="[ { 'q-mt-sm': $attrs.label }, `bg-${color}` ]"
         :flat="flat"
       >
         <editor-toolbar
@@ -64,6 +65,7 @@
                 :editor-blocks="blocks"
                 :editor-draggable-group="draggableGroup"
                 :editor-flat="flat"
+                :editor-color="color"
                 :editor-with-copy="withCopy"
                 :editor-with-paste="withPaste"
                 :editor-with-visibility="withVisibility"
@@ -85,15 +87,15 @@
 // TODO: [ButtonBlock]
 // TODO: ked mam napr. prazdny Paragraf a chcem ho zmazat tak to vyhodi confirm, ale pre prazdny paragraf je ten confirm nepodstatny
 
-import { useQuasar } from 'quasar'
+import copy from 'clipboard-copy'
 import Draggable from 'vuedraggable'
-import { defineComponent, reactive, computed } from 'vue'
-
+import { useQuasar } from 'quasar'
 import EditorToolbar from './EditorToolbar'
 import EditorBlockToolbar from './EditorBlockToolbar'
-
-import copy from 'clipboard-copy'
+import { defineComponent, reactive, computed } from 'vue'
 import { withEditorProps } from 'src/editor/composables/block'
+
+// TODO: dat do configu ?
 const clipboardPrefix = 'block-editor-content:'
 
 export default defineComponent({

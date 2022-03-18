@@ -48,7 +48,7 @@
       <q-card
         class="item q-mx-sm q-mt-md q-mb-sm"
         :class="[
-          sectionColor(element, index),
+          `bg-${sectionColor(element, index)}`,
           { 'invisible-section': (editorWithVisibility && !element.visible) }
         ]"
       >
@@ -65,6 +65,7 @@
           </template>
         </editor-block-toolbar>
         <editor
+          :color="sectionColor(element, index)"
           v-show="!editorWithVisibility || element.visible || !config.collapseInvisibleSections"
           style="margin-top: -15px;"
           flat
@@ -96,7 +97,7 @@ export default defineComponent({
     icon: 'auto_awesome_mosaic',
     defaultConfig: {
       defaultDirection: 'row',
-      sectionColorStrength: 2,
+      sectionColorStrength: 1,
       collapseInvisibleSections: true,
     },
     defaultValue (config) {
@@ -170,7 +171,7 @@ export default defineComponent({
     ]
     function sectionColor (section, index) {
       const colorIndex = index % sectionColors.length
-      return `bg-${sectionColors[colorIndex]}-${props.config.sectionColorStrength}`
+      return `${sectionColors[colorIndex]}-${props.config.sectionColorStrength}`
     }
 
     return {

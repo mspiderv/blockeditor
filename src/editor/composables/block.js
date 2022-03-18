@@ -26,6 +26,10 @@ export function withEditorProps () {
       type: Boolean,
       default: false
     },
+    color: {
+      type: String,
+      default: 'transparent',
+    },
     withCopy: {
       type: Boolean,
       default: false
@@ -70,6 +74,10 @@ export function withBlockProps () {
     editorFlat: {
       type: Boolean,
       default: false
+    },
+    editorColor: {
+      type: String,
+      default: 'transparent',
     },
     editorWithCopy: {
       type: Boolean,
