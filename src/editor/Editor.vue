@@ -11,6 +11,8 @@
       >
         <editor-toolbar
           :blocks="blocksForToolbar"
+          :show-block-icons="showBlockIcons"
+          :show-block-labels="showBlockLabels"
           :model-value="modelValue"
           :with-copy="withCopy"
           :with-paste="withPaste"
@@ -63,6 +65,8 @@
                 :actions-ref="actionRefs[index]"
 
                 :editor-blocks="blocks"
+                :editor-show-block-icons="showBlockIcons"
+                :editor-show-block-labels="showBlockLabels"
                 :editor-draggable-group="draggableGroup"
                 :editor-flat="flat"
                 :editor-color="color"

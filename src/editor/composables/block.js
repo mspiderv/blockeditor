@@ -16,6 +16,14 @@ export function withEditorProps () {
       type: Array,
       required: true,
     },
+    showBlockIcons: {
+      type: Boolean,
+      default: true,
+    },
+    showBlockLabels: {
+      type: Boolean,
+      default: false,
+    },
     draggableGroup: {
       type: String,
       default () {
@@ -65,31 +73,37 @@ export function withBlockProps () {
       type: Array,
       required: true,
     },
+    editorShowBlockIcons: {
+      type: Boolean,
+      required: true,
+    },
+    editorShowBlockLabels: {
+      type: Boolean,
+      required: true,
+    },
     editorDraggableGroup: {
       type: String,
-      default () {
-        return `blockeditor-group-${nextEditorId++}`
-      },
+      required: true,
     },
     editorFlat: {
       type: Boolean,
-      default: false
+      required: true,
     },
     editorColor: {
       type: String,
-      default: 'transparent',
+      required: true,
     },
     editorWithCopy: {
       type: Boolean,
-      default: false
+      required: true,
     },
     editorWithPaste: {
       type: Boolean,
-      default: false
+      required: true,
     },
     editorWithVisibility: {
       type: Boolean,
-      default: false
+      required: true,
     }
   }
 }

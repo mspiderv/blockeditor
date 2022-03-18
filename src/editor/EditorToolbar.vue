@@ -4,10 +4,11 @@
       <slot name="prepend" />
       <q-btn
         flat
-        round
+        :round="!showBlockLabels"
         v-for="block of blocks"
         :key="block.name"
-        :icon="block.icon"
+        :icon="showBlockIcons ? block.icon : undefined"
+        :label="showBlockLabels ? block.title : undefined"
         @click="$emit('createBlock', block)"
       >
         <q-tooltip>{{ block.title }}</q-tooltip>
@@ -61,6 +62,14 @@ export default defineComponent({
   props: {
     blocks: {
       type: Array,
+      required: true,
+    },
+    showBlockIcons: {
+      type: Boolean,
+      required: true,
+    },
+    showBlockLabels: {
+      type: Boolean,
       required: true,
     },
     modelValue: {

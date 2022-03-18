@@ -72,6 +72,8 @@
           class="q-px-sm"
           v-model="element.data"
           :blocks="editorBlocks"
+          :show-block-icons="editorShowBlockIcons"
+          :show-block-labels="editorShowBlockLabels"
           :draggable-group="editorDraggableGroup"
           :with-copy="editorWithCopy"
           :with-paste="editorWithPaste"
